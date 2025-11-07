@@ -2208,6 +2208,11 @@ export default function App() {
     handleTutorialComplete();
   };
 
+  const handleShowTutorial = () => {
+    setHasSeenTutorial(false);
+    setTutorialStep(0);
+  };
+
   const TUTORIAL_STEPS = [
     {
       title: 'Master Public Speaking',
@@ -2376,14 +2381,24 @@ export default function App() {
               <Text style={styles.heading}>Public Speaking Academy</Text>
               <Text style={styles.subheading}>Master every skill, one card at a time.</Text>
     </View>
-            <TouchableOpacity 
-              onPress={handleOpenJournal} 
-              style={styles.journalButton}
-              accessibilityRole="button"
-              accessibilityLabel="Open Journal"
-            >
-              <Text style={styles.journalButtonText}>Journal</Text>
-            </TouchableOpacity>
+            <View style={styles.headerButtons}>
+              <TouchableOpacity 
+                onPress={handleShowTutorial} 
+                style={styles.tutorialIconButton}
+                accessibilityRole="button"
+                accessibilityLabel="Show tutorial"
+              >
+                <Text style={styles.tutorialIconButtonText}>?</Text>
+              </TouchableOpacity>
+              <TouchableOpacity 
+                onPress={handleOpenJournal} 
+                style={styles.journalButton}
+                accessibilityRole="button"
+                accessibilityLabel="Open Journal"
+              >
+                <Text style={styles.journalButtonText}>Journal</Text>
+              </TouchableOpacity>
+            </View>
           </View>
           <View style={styles.overallProgress}>
             <Text style={styles.overallProgressText}>
@@ -3573,6 +3588,32 @@ const styles = StyleSheet.create({
   headerTitleContainer: {
     flex: 1,
   },
+  headerButtons: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  tutorialIconButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 3,
+  },
+  tutorialIconButtonText: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    lineHeight: 24,
+  },
   journalButton: {
     paddingVertical: 12,
     paddingHorizontal: 20,
@@ -3580,7 +3621,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(79, 172, 254, 0.25)',
     borderWidth: 1.5,
     borderColor: 'rgba(79, 172, 254, 0.6)',
-    marginLeft: 12,
+    marginLeft: 0,
     shadowColor: '#4facfe',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,

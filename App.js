@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Alert,
   Dimensions,
+  Platform,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,9 +14,28 @@ import {
   TextInput,
   TouchableOpacity,
   View,
+  useWindowDimensions,
 } from 'react-native';
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+// Get initial screen dimensions
+const getScreenDimensions = () => {
+  const { width, height } = Dimensions.get('window');
+  return { width, height };
+};
+
+// Calculate optimal card width based on screen size
+const getCardWidth = (screenWidth) => {
+  // For iPad, limit card width to 600px for better readability
+  // For iPhone, use full width minus padding
+  const isTablet = screenWidth >= 768;
+  const maxCardWidth = 600;
+  const padding = 40;
+  
+  if (isTablet) {
+    return Math.min(screenWidth - padding, maxCardWidth);
+  }
+  return screenWidth - padding;
+};
 
 const STORAGE_KEY = 'PSA_PROGRESS_V2';
 const JOURNAL_STORAGE_KEY = 'PSA_JOURNAL_V1';
@@ -1776,6 +1796,7 @@ const MODULES = [
 const getModuleById = (id) => MODULES.find((module) => module.id === id) || null;
 
 export default function App() {
+  const { width: screenWidth, height: screenHeight } = useWindowDimensions();
   const [progress, setProgress] = useState({ completedCards: {} });
   const [journalEntries, setJournalEntries] = useState({});
   const [currentModuleId, setCurrentModuleId] = useState(null);
@@ -1788,6 +1809,10 @@ export default function App() {
   const [celebratedModuleId, setCelebratedModuleId] = useState(null);
   const cardScrollViewRef = useRef(null);
   const hasHydrated = useRef(false);
+  
+  // Calculate card width and device type dynamically
+  const cardWidth = useMemo(() => getCardWidth(screenWidth), [screenWidth]);
+  const isTablet = screenWidth >= 768;
 
   useEffect(() => {
     const loadData = async () => {
@@ -2000,22 +2025,23 @@ export default function App() {
 
   const handleCardScroll = useCallback((event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
-    const cardWidth = SCREEN_WIDTH - 40;
-    const newIndex = Math.round(offsetX / cardWidth);
+    const currentCardWidth = getCardWidth(screenWidth);
+    const newIndex = Math.round(offsetX / currentCardWidth);
     if (newIndex !== currentCardIndex && newIndex >= 0 && currentModule && newIndex < currentModule.cards.length) {
       setCurrentCardIndex(newIndex);
     }
-  }, [currentCardIndex, currentModule]);
+  }, [currentCardIndex, currentModule, screenWidth]);
 
   useEffect(() => {
     if (cardScrollViewRef.current && currentModule && currentCardIndex >= 0) {
-      const scrollX = currentCardIndex * (SCREEN_WIDTH - 40);
+      const currentCardWidth = getCardWidth(screenWidth);
+      const scrollX = currentCardIndex * currentCardWidth;
       cardScrollViewRef.current.scrollTo({
         x: scrollX,
         animated: false,
       });
     }
-  }, [currentModuleId, currentCardIndex]);
+  }, [currentModuleId, currentCardIndex, screenWidth]);
 
   const handleCardComplete = useCallback(() => {
     if (!currentModule) {
@@ -2034,7 +2060,8 @@ export default function App() {
         // Scroll to next card
         setTimeout(() => {
           if (cardScrollViewRef.current) {
-            const scrollX = nextIncomplete * (SCREEN_WIDTH - 40);
+            const currentCardWidth = getCardWidth(screenWidth);
+            const scrollX = nextIncomplete * currentCardWidth;
             cardScrollViewRef.current.scrollTo({
               x: scrollX,
               animated: true,
@@ -2080,7 +2107,8 @@ export default function App() {
       // Scroll to next card
       setTimeout(() => {
         if (cardScrollViewRef.current) {
-          const scrollX = nextIncomplete * (SCREEN_WIDTH - 40);
+          const currentCardWidth = getCardWidth(screenWidth);
+          const scrollX = nextIncomplete * currentCardWidth;
           cardScrollViewRef.current.scrollTo({
             x: scrollX,
             animated: true,
@@ -2088,7 +2116,7 @@ export default function App() {
         }
       }, 100);
     }
-  }, [currentModule, currentCardIndex, progress, handlePromptJournal]);
+  }, [currentModule, currentCardIndex, progress, handlePromptJournal, screenWidth, cardWidth]);
 
   const handleResetModule = useCallback(() => {
     if (!currentModule) {
@@ -2134,7 +2162,7 @@ export default function App() {
         { key: 'example', label: 'Example' },
         { key: 'practice', label: 'Practice' },
       ];
-      return (
+  return (
         <View style={styles.cardDetails}>
           {sections
             .filter(({ key }) => Boolean(content[key]))
@@ -2163,13 +2191,13 @@ export default function App() {
   const renderHomeScreen = () => (
     <SafeAreaView style={styles.safeArea}>
       <StatusBar style="light" />
-      <View style={styles.container}>
+    <View style={styles.container}>
         <View style={styles.header}>
           <View style={styles.headerTopRow}>
             <View style={styles.headerTitleContainer}>
               <Text style={styles.heading}>Public Speaking Academy</Text>
               <Text style={styles.subheading}>Master every skill, one card at a time.</Text>
-            </View>
+    </View>
             <TouchableOpacity 
               onPress={handleOpenJournal} 
               style={styles.journalButton}
@@ -2394,20 +2422,23 @@ export default function App() {
               </Text>
             </View>
 
-            <View style={styles.cardScrollWrapper}>
+            <View style={[styles.cardScrollWrapper, isTablet && styles.cardScrollWrapperTablet]}>
               <ScrollView
                 ref={cardScrollViewRef}
                 horizontal
                 showsHorizontalScrollIndicator={false}
                 onMomentumScrollEnd={handleCardScroll}
                 decelerationRate="fast"
-                snapToInterval={SCREEN_WIDTH - 40}
-                snapToAlignment="start"
+                snapToInterval={cardWidth}
+                snapToAlignment={isTablet ? "center" : "start"}
                 style={styles.cardHorizontalScroll}
-                contentContainerStyle={styles.cardHorizontalScrollContent}
+                contentContainerStyle={[
+                  styles.cardHorizontalScrollContent,
+                  isTablet && styles.cardHorizontalScrollContentTablet,
+                ]}
               >
                 {currentModule.cards.map((card, index) => (
-                  <View key={card.id} style={styles.cardSlide}>
+                  <View key={card.id} style={[styles.cardSlide, { width: cardWidth }]}>
                     <View style={styles.card}>
                       <Text style={styles.cardTitle}>{card.title}</Text>
                       {renderRevealedContent(card)}
@@ -3011,6 +3042,10 @@ const styles = StyleSheet.create({
   cardScrollWrapper: {
     marginBottom: 20,
     width: '100%',
+    alignItems: 'center',
+  },
+  cardScrollWrapperTablet: {
+    paddingHorizontal: 20,
   },
   cardHorizontalScroll: {
     width: '100%',
@@ -3018,9 +3053,12 @@ const styles = StyleSheet.create({
   cardHorizontalScrollContent: {
     paddingHorizontal: 0,
   },
+  cardHorizontalScrollContentTablet: {
+    paddingHorizontal: 20,
+  },
   cardSlide: {
-    width: SCREEN_WIDTH - 40,
     paddingHorizontal: 0,
+    marginHorizontal: 0,
   },
   card: {
     backgroundColor: 'rgba(8, 16, 38, 0.92)',

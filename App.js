@@ -7,7 +7,6 @@ import {
   Alert,
   Dimensions,
   Platform,
-  SafeAreaView,
   ScrollView,
   StyleSheet,
   Text,
@@ -16,6 +15,7 @@ import {
   View,
   useWindowDimensions,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // Get initial screen dimensions
 const getScreenDimensions = () => {

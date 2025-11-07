@@ -39,6 +39,7 @@ const getCardWidth = (screenWidth) => {
 
 const STORAGE_KEY = 'PSA_PROGRESS_V2';
 const JOURNAL_STORAGE_KEY = 'PSA_JOURNAL_V1';
+const TUTORIAL_STORAGE_KEY = 'PSA_TUTORIAL_SEEN_V1';
 
 const createCards = (moduleId, items) =>
   items.map((content, index) => ({
@@ -1807,6 +1808,8 @@ export default function App() {
   const [journalEntryText, setJournalEntryText] = useState('');
   const [showCelebration, setShowCelebration] = useState(false);
   const [celebratedModuleId, setCelebratedModuleId] = useState(null);
+  const [hasSeenTutorial, setHasSeenTutorial] = useState(false);
+  const [tutorialStep, setTutorialStep] = useState(0);
   const cardScrollViewRef = useRef(null);
   const hasHydrated = useRef(false);
   
@@ -1817,9 +1820,10 @@ export default function App() {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const [storedProgress, storedJournal] = await Promise.all([
+        const [storedProgress, storedJournal, storedTutorial] = await Promise.all([
           AsyncStorage.getItem(STORAGE_KEY),
           AsyncStorage.getItem(JOURNAL_STORAGE_KEY),
+          AsyncStorage.getItem(TUTORIAL_STORAGE_KEY),
         ]);
 
         if (storedProgress) {
@@ -1836,6 +1840,10 @@ export default function App() {
           if (parsed) {
             setJournalEntries(parsed);
           }
+        }
+
+        if (storedTutorial === 'true') {
+          setHasSeenTutorial(true);
         }
       } catch (error) {
         console.warn('Failed to load data', error);
@@ -2178,6 +2186,172 @@ export default function App() {
     return null;
   };
 
+  const handleTutorialComplete = async () => {
+    try {
+      await AsyncStorage.setItem(TUTORIAL_STORAGE_KEY, 'true');
+      setHasSeenTutorial(true);
+    } catch (error) {
+      console.warn('Failed to save tutorial status', error);
+      setHasSeenTutorial(true);
+    }
+  };
+
+  const handleTutorialNext = () => {
+    if (tutorialStep < TUTORIAL_STEPS.length - 1) {
+      setTutorialStep(tutorialStep + 1);
+    } else {
+      handleTutorialComplete();
+    }
+  };
+
+  const handleTutorialSkip = () => {
+    handleTutorialComplete();
+  };
+
+  const TUTORIAL_STEPS = [
+    {
+      title: 'Master Public Speaking',
+      description: 'Transform your communication skills through structured learning modules designed by experts.',
+      gradient: ['#667eea', '#764ba2'],
+      iconType: 'PS',
+      features: [
+        '12 comprehensive learning modules',
+        '180+ practice cards with real examples',
+        'Progress tracking and achievements',
+      ],
+    },
+    {
+      title: 'Learn at Your Pace',
+      description: 'Each module contains 15 carefully crafted cards covering explanation, examples, and practice exercises.',
+      gradient: ['#4facfe', '#00f2fe'],
+      iconType: '15',
+      features: [
+        'Swipe through cards horizontally',
+        'Mark cards complete as you learn',
+        'Unlock modules sequentially',
+      ],
+    },
+    {
+      title: 'Track Your Progress',
+      description: 'Visual progress indicators show your journey through each module. Complete all cards to unlock the next module.',
+      gradient: ['#43e97b', '#38f9d7'],
+      iconType: 'progress',
+      features: [
+        'Real-time progress tracking',
+        'Visual completion indicators',
+        'Module unlocking system',
+      ],
+    },
+    {
+      title: 'Reflect in Your Journal',
+      description: 'Capture key takeaways and insights for each module. Build your personal learning journal as you progress.',
+      gradient: ['#fbc2eb', '#a6c1ee'],
+      iconType: 'J',
+      features: [
+        'Personal journal for each module',
+        'Save your reflections and insights',
+        'Review your learning journey',
+      ],
+    },
+    {
+      title: 'Ready to Begin?',
+      description: 'Start with Module 1: Basic Speaking Skills and begin your transformation into a confident speaker.',
+      gradient: ['#ff9a9e', '#fecfef'],
+      iconType: 'GO',
+      features: [
+        'Start with fundamentals',
+        'Build skills progressively',
+        'Become a confident speaker',
+      ],
+    },
+  ];
+
+  const renderTutorialIcon = (iconType) => {
+    if (iconType === 'progress') {
+      return (
+        <View style={styles.tutorialProgressIcon}>
+          <View style={styles.tutorialProgressBar} />
+        </View>
+      );
+    }
+    return <Text style={styles.tutorialIconText}>{iconType}</Text>;
+  };
+
+  const renderTutorial = () => {
+    const currentTutorial = TUTORIAL_STEPS[tutorialStep];
+    const isLastStep = tutorialStep === TUTORIAL_STEPS.length - 1;
+
+    return (
+      <LinearGradient colors={currentTutorial.gradient} style={styles.tutorialContainer}>
+        <SafeAreaView style={styles.tutorialSafeArea}>
+          <StatusBar style="light" />
+          <ScrollView
+            contentContainerStyle={styles.tutorialScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
+            <View style={styles.tutorialHeader}>
+              <TouchableOpacity
+                onPress={handleTutorialSkip}
+                style={styles.tutorialSkipButton}
+                accessibilityRole="button"
+                accessibilityLabel="Skip tutorial"
+              >
+                <Text style={styles.tutorialSkipText}>Skip</Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.tutorialContent}>
+              <View style={styles.tutorialIconContainer}>
+                <View style={styles.tutorialIconCircle}>
+                  {renderTutorialIcon(currentTutorial.iconType)}
+                </View>
+              </View>
+              
+              <Text style={styles.tutorialTitle}>{currentTutorial.title}</Text>
+              <Text style={styles.tutorialDescription}>{currentTutorial.description}</Text>
+              
+              {currentTutorial.features && (
+                <View style={styles.tutorialFeatures}>
+                  {currentTutorial.features.map((feature, index) => (
+                    <View key={index} style={styles.tutorialFeature}>
+                      <View style={styles.tutorialFeatureBullet} />
+                      <Text style={styles.tutorialFeatureText}>{feature}</Text>
+                    </View>
+                  ))}
+                </View>
+              )}
+            </View>
+
+            <View style={styles.tutorialFooter}>
+              <View style={styles.tutorialDots}>
+                {TUTORIAL_STEPS.map((_, index) => (
+                  <View
+                    key={index}
+                    style={[
+                      styles.tutorialDot,
+                      index === tutorialStep && styles.tutorialDotActive,
+                    ]}
+                  />
+                ))}
+              </View>
+
+              <TouchableOpacity
+                onPress={handleTutorialNext}
+                style={styles.tutorialButton}
+                accessibilityRole="button"
+                accessibilityLabel={isLastStep ? 'Get started' : 'Next'}
+              >
+                <Text style={styles.tutorialButtonText}>
+                  {isLastStep ? 'Get Started' : 'Next'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
+        </SafeAreaView>
+      </LinearGradient>
+    );
+  };
+
   if (isLoading) {
     return (
       <SafeAreaView style={[styles.safeArea, styles.centered]}>
@@ -2186,6 +2360,10 @@ export default function App() {
         <Text style={styles.loadingText}>Loading your academy progress...</Text>
       </SafeAreaView>
     );
+  }
+
+  if (!hasSeenTutorial) {
+    return renderTutorial();
   }
 
   const renderHomeScreen = () => (
@@ -3172,6 +3350,194 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
     fontSize: 14,
+  },
+  tutorialContainer: {
+    flex: 1,
+  },
+  tutorialSafeArea: {
+    flex: 1,
+    backgroundColor: 'transparent',
+  },
+  tutorialScrollContent: {
+    flexGrow: 1,
+    paddingHorizontal: 24,
+    paddingTop: 20,
+    paddingBottom: 40,
+    justifyContent: 'space-between',
+  },
+  tutorialHeader: {
+    alignItems: 'flex-end',
+    marginBottom: 20,
+  },
+  tutorialSkipButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  tutorialSkipText: {
+    color: 'rgba(255, 255, 255, 0.8)',
+    fontSize: 16,
+    fontWeight: '600',
+    letterSpacing: 0.3,
+  },
+  tutorialContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 40,
+  },
+  tutorialIconContainer: {
+    marginBottom: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  tutorialIconCircle: {
+    width: 140,
+    height: 140,
+    borderRadius: 70,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 3,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.3,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  tutorialIconText: {
+    color: '#ffffff',
+    fontSize: 48,
+    fontWeight: '800',
+    letterSpacing: 2,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  tutorialProgressIcon: {
+    width: 100,
+    height: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 6,
+    overflow: 'hidden',
+  },
+  tutorialProgressBar: {
+    width: '75%',
+    height: '100%',
+    backgroundColor: '#ffffff',
+    borderRadius: 6,
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  tutorialTitle: {
+    color: '#ffffff',
+    fontSize: 36,
+    fontWeight: '800',
+    textAlign: 'center',
+    marginBottom: 20,
+    letterSpacing: -0.5,
+    lineHeight: 44,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 6,
+    paddingHorizontal: 20,
+  },
+  tutorialDescription: {
+    color: 'rgba(255, 255, 255, 0.95)',
+    fontSize: 18,
+    textAlign: 'center',
+    lineHeight: 28,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+    marginBottom: 40,
+    paddingHorizontal: 20,
+  },
+  tutorialFeatures: {
+    width: '100%',
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  tutorialFeature: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+    paddingHorizontal: 10,
+  },
+  tutorialFeatureBullet: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    marginTop: 8,
+    marginRight: 16,
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  tutorialFeatureText: {
+    flex: 1,
+    color: 'rgba(255, 255, 255, 0.95)',
+    fontSize: 17,
+    lineHeight: 26,
+    fontWeight: '500',
+    letterSpacing: 0.1,
+  },
+  tutorialFooter: {
+    paddingTop: 20,
+  },
+  tutorialDots: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 32,
+  },
+  tutorialDot: {
+    width: 8,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.4)',
+    marginHorizontal: 6,
+  },
+  tutorialDotActive: {
+    width: 24,
+    height: 8,
+    borderRadius: 4,
+    backgroundColor: '#ffffff',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+    elevation: 4,
+  },
+  tutorialButton: {
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 20,
+    paddingVertical: 18,
+    paddingHorizontal: 48,
+    alignItems: 'center',
+    justifyContent: 'center',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
+  },
+  tutorialButtonText: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+    textShadowColor: 'rgba(0, 0, 0, 0.2)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   cardDetails: {
     marginTop: 12,

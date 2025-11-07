@@ -5,6 +5,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Dimensions,
   SafeAreaView,
   ScrollView,
   StyleSheet,
@@ -13,6 +14,8 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
 
 const STORAGE_KEY = 'PSA_PROGRESS_V2';
 const JOURNAL_STORAGE_KEY = 'PSA_JOURNAL_V1';
@@ -1686,84 +1689,84 @@ const IDENTITY_PROJECTION_CARDS = [
 const MODULES = [
   {
     id: 'fundamentals',
-    title: 'Module 1 · Fundamentals of Speaking Mechanics',
+    title: 'Module 1: Basic Speaking Skills',
     description: 'Build a rock-solid foundation for every talk you deliver.',
     gradient: ['#4facfe', '#00f2fe'],
     cards: FUNDAMENTALS_CARDS,
   },
   {
     id: 'breathing',
-    title: 'Module 2 · Breathing and Resonance',
+    title: 'Module 2: Breathing & Voice Strength',
     description: 'Power your voice with low-belly breathing and resonant warm-ups.',
     gradient: ['#ff9a9e', '#fad0c4'],
     cards: BREATHING_CARDS,
   },
   {
     id: 'pacing',
-    title: 'Module 3 · Pacing and Silence',
+    title: 'Module 3: Slow Down & Control Your Pace',
     description: 'Control tempo, rhythm, and intentional silence for maximum impact.',
     gradient: ['#a18cd1', '#fbc2eb'],
     cards: PACING_CARDS,
   },
   {
     id: 'language',
-    title: 'Module 4 · Filler Removal & Linguistic Tightening',
+    title: 'Module 4: Remove Filler Words',
     description: 'Cut filler, tighten language, and land every sentence with confidence.',
     gradient: ['#f6d365', '#fda085'],
     cards: LANGUAGE_TIGHTENING_CARDS,
   },
   {
     id: 'clarityStructure',
-    title: 'Module 5 · Clarity & Sentence Structure',
+    title: 'Module 5: Speak Clearly & Simply',
     description: 'Organize ideas into crisp sentences that audiences can follow.',
     gradient: ['#cfd9df', '#e2ebf0'],
     cards: CLARITY_STRUCTURE_CARDS,
   },
   {
     id: 'storytelling',
-    title: 'Module 6 · Storytelling Fundamentals',
+    title: 'Module 6: Tell Better Stories',
     description: 'Craft narratives that persuade, inspire, and stay memorable.',
     gradient: ['#84fab0', '#8fd3f4'],
     cards: STORYTELLING_CARDS,
   },
   {
     id: 'emotionalTone',
-    title: 'Module 7 · Emotional Communication & Tone Shifting',
+    title: 'Module 7: Express Feelings Calmly',
     description: 'Shape emotion with vocal variety, pacing, and dynamic energy.',
     gradient: ['#ffecd2', '#fcb69f'],
     cards: EMOTIONAL_TONE_CARDS,
   },
   {
     id: 'persuasion',
-    title: 'Module 8 · Persuasion Logic & Objection Handling',
+    title: 'Module 8: Speak With Confidence',
     description: 'Respond to pushback while keeping your argument on track.',
     gradient: ['#fbc2eb', '#a6c1ee'],
     cards: PERSUASION_CARDS,
   },
   {
     id: 'ideaFraming',
-    title: 'Module 9 · Idea Framing & Narrative Hierarchy',
+    title: 'Module 9: Stay On One Main Point',
     description: 'Sequence ideas and stories so the big picture is always clear.',
     gradient: ['#ff9a9e', '#fecfef'],
     cards: IDEA_FRAMING_CARDS,
   },
   {
     id: 'openingMastery',
-    title: 'Module 10 · Opening Mastery (hooks, cold opens, cliffhangers)',
+    title: 'Module 10: Start Your Message Strong',
     description: 'Design magnetic openings that hook attention immediately.',
     gradient: ['#a1c4fd', '#c2e9fb'],
     cards: OPENING_MASTERY_CARDS,
   },
   {
     id: 'closingMastery',
-    title: 'Module 11 · Closing Mastery (loops, anchors, call to action)',
+    title: 'Module 11: End Your Message Strong',
     description: 'Land conclusions that inspire action and stay memorable.',
     gradient: ['#43e97b', '#38f9d7'],
     cards: CLOSING_MASTERY_CARDS,
   },
   {
     id: 'identityProjection',
-    title: 'Module 12 · Identity Projection & Character Profile Building',
+    title: 'Module 12: Build a Confident Identity',
     description: 'Project the persona you want through movement, presence, and poise.',
     gradient: ['#667eea', '#764ba2'],
     cards: IDENTITY_PROJECTION_CARDS,
@@ -1777,11 +1780,13 @@ export default function App() {
   const [journalEntries, setJournalEntries] = useState({});
   const [currentModuleId, setCurrentModuleId] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
-  const [isCardRevealed, setIsCardRevealed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [currentView, setCurrentView] = useState('home'); // 'home', 'module', 'journalList', 'journalEntry'
   const [editingModuleId, setEditingModuleId] = useState(null);
   const [journalEntryText, setJournalEntryText] = useState('');
+  const [showCelebration, setShowCelebration] = useState(false);
+  const [celebratedModuleId, setCelebratedModuleId] = useState(null);
+  const cardScrollViewRef = useRef(null);
   const hasHydrated = useRef(false);
 
   useEffect(() => {
@@ -1911,7 +1916,6 @@ export default function App() {
       const nextIndex = getNextUncompletedCardIndex(moduleId);
       setCurrentModuleId(moduleId);
       setCurrentCardIndex(nextIndex);
-      setIsCardRevealed(false);
       setCurrentView('module');
     },
     [getNextUncompletedCardIndex, isModuleUnlocked],
@@ -1920,8 +1924,9 @@ export default function App() {
   const handleBackHome = useCallback(() => {
     setCurrentModuleId(null);
     setCurrentCardIndex(0);
-    setIsCardRevealed(false);
     setCurrentView('home');
+    setShowCelebration(false);
+    setCelebratedModuleId(null);
   }, []);
 
   const handleOpenJournal = useCallback(() => {
@@ -1993,25 +1998,54 @@ export default function App() {
     return new Set(progress.completedCards[currentModule.id] || []);
   }, [currentModule, progress]);
 
-  const handleToggleReveal = useCallback(() => {
-    setIsCardRevealed((prev) => !prev);
-  }, []);
-
   const handleNextCard = useCallback(() => {
     if (!currentModule) {
       return;
     }
-    setCurrentCardIndex((prev) => Math.min(prev + 1, currentModule.cards.length - 1));
-    setIsCardRevealed(false);
-  }, [currentModule]);
+    const nextIndex = Math.min(currentCardIndex + 1, currentModule.cards.length - 1);
+    setCurrentCardIndex(nextIndex);
+    if (cardScrollViewRef.current) {
+      const cardWidth = SCREEN_WIDTH - 40;
+      cardScrollViewRef.current.scrollTo({
+        x: nextIndex * cardWidth,
+        animated: true,
+      });
+    }
+  }, [currentModule, currentCardIndex]);
 
   const handlePrevCard = useCallback(() => {
     if (!currentModule) {
       return;
     }
-    setCurrentCardIndex((prev) => Math.max(prev - 1, 0));
-    setIsCardRevealed(false);
-  }, [currentModule]);
+    const prevIndex = Math.max(currentCardIndex - 1, 0);
+    setCurrentCardIndex(prevIndex);
+    if (cardScrollViewRef.current) {
+      const cardWidth = SCREEN_WIDTH - 40;
+      cardScrollViewRef.current.scrollTo({
+        x: prevIndex * cardWidth,
+        animated: true,
+      });
+    }
+  }, [currentModule, currentCardIndex]);
+
+  const handleCardScroll = useCallback((event) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const cardWidth = SCREEN_WIDTH - 40;
+    const newIndex = Math.round(offsetX / cardWidth);
+    if (newIndex !== currentCardIndex && newIndex >= 0 && currentModule && newIndex < currentModule.cards.length) {
+      setCurrentCardIndex(newIndex);
+    }
+  }, [currentCardIndex, currentModule]);
+
+  useEffect(() => {
+    if (cardScrollViewRef.current && currentModule && currentCardIndex >= 0) {
+      const scrollX = currentCardIndex * (SCREEN_WIDTH - 40);
+      cardScrollViewRef.current.scrollTo({
+        x: scrollX,
+        animated: false,
+      });
+    }
+  }, [currentModuleId, currentCardIndex]);
 
   const handleCardComplete = useCallback(() => {
     if (!currentModule) {
@@ -2019,16 +2053,32 @@ export default function App() {
     }
     const moduleId = currentModule.id;
     const cardIndex = currentCardIndex;
-    let updatedSet = null;
 
+    // Check if card is already completed - if so, just advance to next incomplete card
+    const currentCompleted = new Set(progress.completedCards[moduleId] || []);
+    if (currentCompleted.has(cardIndex)) {
+      // Card already completed, just advance to next incomplete
+      const nextIncomplete = currentModule.cards.findIndex((_, index) => !currentCompleted.has(index));
+      if (nextIncomplete !== -1) {
+        setCurrentCardIndex(nextIncomplete);
+        // Scroll to next card
+        setTimeout(() => {
+          if (cardScrollViewRef.current) {
+            const scrollX = nextIncomplete * (SCREEN_WIDTH - 40);
+            cardScrollViewRef.current.scrollTo({
+              x: scrollX,
+              animated: true,
+            });
+          }
+        }, 100);
+      }
+      return;
+    }
+
+    // Mark card as completed
     setProgress((prev) => {
       const existing = new Set(prev.completedCards[moduleId] || []);
-      if (existing.has(cardIndex)) {
-        updatedSet = existing;
-        return prev;
-      }
       existing.add(cardIndex);
-      updatedSet = existing;
       const updatedArray = Array.from(existing).sort((a, b) => a - b);
       return {
         completedCards: {
@@ -2038,29 +2088,35 @@ export default function App() {
       };
     });
 
-    if (!updatedSet) {
-      updatedSet = new Set(progress.completedCards[moduleId] || []);
-    }
-
+    // Check if module is now complete
     const moduleLength = currentModule.cards.length;
-    if (updatedSet.size >= moduleLength) {
-      setIsCardRevealed(true);
+    const newCompletedSet = new Set([...currentCompleted, cardIndex]);
+    
+    if (newCompletedSet.size >= moduleLength) {
+      // Module complete - show celebration banner
+      setCelebratedModuleId(moduleId);
+      setShowCelebration(true);
+      // Auto-prompt journal after a delay
       setTimeout(() => {
         handlePromptJournal(moduleId);
-      }, 500);
+      }, 3000);
       return;
     }
 
-    const nextIncomplete = currentModule.cards.findIndex((_, index) => !updatedSet.has(index));
-    if (nextIncomplete !== -1) {
+    // Find and advance to next incomplete card
+    const nextIncomplete = currentModule.cards.findIndex((_, index) => !newCompletedSet.has(index));
+    if (nextIncomplete !== -1 && nextIncomplete !== cardIndex) {
       setCurrentCardIndex(nextIncomplete);
-      setIsCardRevealed(false);
-      return;
-    }
-
-    if (cardIndex < moduleLength - 1) {
-      setCurrentCardIndex(cardIndex + 1);
-      setIsCardRevealed(false);
+      // Scroll to next card
+      setTimeout(() => {
+        if (cardScrollViewRef.current) {
+          const scrollX = nextIncomplete * (SCREEN_WIDTH - 40);
+          cardScrollViewRef.current.scrollTo({
+            x: scrollX,
+            animated: true,
+          });
+        }
+      }, 100);
     }
   }, [currentModule, currentCardIndex, progress, handlePromptJournal]);
 
@@ -2088,7 +2144,6 @@ export default function App() {
               },
             }));
             setCurrentCardIndex(0);
-            setIsCardRevealed(false);
           },
         },
       ],
@@ -2249,7 +2304,11 @@ export default function App() {
       <LinearGradient colors={currentModule.gradient} style={styles.moduleScreen}>
         <SafeAreaView style={styles.safeAreaTransparent}>
           <StatusBar style="light" />
-          <View style={styles.moduleScreenContent}>
+          <ScrollView
+            style={styles.moduleScrollView}
+            contentContainerStyle={styles.moduleScrollContent}
+            showsVerticalScrollIndicator={false}
+          >
             <View style={styles.moduleHeader}>
               <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
                 <Text style={styles.backButtonText}>Back</Text>
@@ -2302,7 +2361,18 @@ export default function App() {
               </TouchableOpacity>
             </View>
 
-            {moduleProgress.complete && (
+            {showCelebration && celebratedModuleId === currentModule.id && (
+              <View style={styles.celebrationBanner}>
+                <Text style={styles.celebrationTitle}>MODULE COMPLETE!</Text>
+                <Text style={styles.celebrationSubtitle}>You've mastered {currentModule.title}!</Text>
+                <Text style={styles.celebrationBody}>
+                  {nextModule
+                    ? `${nextModule.title} is now unlocked. Keep the momentum going!`
+                    : 'You have completed every module. Outstanding work!'}
+                </Text>
+              </View>
+            )}
+            {moduleProgress.complete && !showCelebration && (
               <View style={styles.successBanner}>
                 <Text style={styles.successTitle}>Module complete!</Text>
                 <Text style={styles.successBody}>
@@ -2330,67 +2400,75 @@ export default function App() {
               })}
             </View>
 
-            <View style={styles.cardContainer}>
+            <View style={styles.cardCounterContainer}>
               <Text style={styles.cardCounter}>
                 Card {currentCardIndex + 1} of {currentModule.cards.length}
               </Text>
-              <View style={[styles.card, isCardRevealed && styles.cardRevealed]}>
-                <Text style={styles.cardTitle}>{currentCard.title}</Text>
-                {isCardRevealed ? (
-                  renderRevealedContent(currentCard)
-                ) : (
-                  <Text style={[styles.cardContent, styles.cardHint]}>
-                    Tap reveal to uncover the guidance for this step.
-                  </Text>
-                )}
-              </View>
-
-              <View style={styles.cardActions}>
-                <TouchableOpacity onPress={handleToggleReveal} style={styles.primaryButton}>
-                  <Text style={styles.primaryButtonText}>
-                    {isCardRevealed ? 'Hide content' : 'Reveal content'}
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleCardComplete}
-                  disabled={completedIndexes.has(currentCardIndex)}
-                  style={[
-                    styles.secondaryButton,
-                    completedIndexes.has(currentCardIndex) && styles.secondaryButtonDisabled,
-                  ]}
-                >
-                  <Text style={styles.secondaryButtonText}>
-                    {completedIndexes.has(currentCardIndex) ? 'Completed' : 'Mark complete'}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-
-              <View style={styles.navigationRow}>
-                <TouchableOpacity
-                  onPress={handlePrevCard}
-                  disabled={currentCardIndex === 0}
-                  style={[
-                    styles.navButton,
-                    styles.navButtonLeft,
-                    currentCardIndex === 0 && styles.navButtonDisabled,
-                  ]}
-                >
-                  <Text style={styles.navButtonText}>Previous</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={handleNextCard}
-                  disabled={currentCardIndex === currentModule.cards.length - 1}
-                  style={[
-                    styles.navButton,
-                    styles.navButtonRight,
-                    currentCardIndex === currentModule.cards.length - 1 && styles.navButtonDisabled,
-                  ]}
-                >
-                  <Text style={styles.navButtonText}>Next</Text>
-                </TouchableOpacity>
-              </View>
             </View>
-          </View>
+
+            <View style={styles.cardScrollWrapper}>
+              <ScrollView
+                ref={cardScrollViewRef}
+                horizontal
+                showsHorizontalScrollIndicator={false}
+                onMomentumScrollEnd={handleCardScroll}
+                decelerationRate="fast"
+                snapToInterval={SCREEN_WIDTH - 40}
+                snapToAlignment="start"
+                style={styles.cardHorizontalScroll}
+                contentContainerStyle={styles.cardHorizontalScrollContent}
+              >
+                {currentModule.cards.map((card, index) => (
+                  <View key={card.id} style={styles.cardSlide}>
+                    <View style={styles.card}>
+                      <Text style={styles.cardTitle}>{card.title}</Text>
+                      {renderRevealedContent(card)}
+                    </View>
+                  </View>
+                ))}
+              </ScrollView>
+            </View>
+
+            <View style={styles.cardActionsContainer}>
+              <TouchableOpacity
+                onPress={handleCardComplete}
+                disabled={completedIndexes.has(currentCardIndex)}
+                style={[
+                  styles.completeButton,
+                  completedIndexes.has(currentCardIndex) && styles.completeButtonDisabled,
+                ]}
+              >
+                <Text style={styles.completeButtonText}>
+                  {completedIndexes.has(currentCardIndex) ? 'Completed ✓' : 'Mark complete'}
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={styles.navigationRow}>
+              <TouchableOpacity
+                onPress={handlePrevCard}
+                disabled={currentCardIndex === 0}
+                style={[
+                  styles.navButton,
+                  styles.navButtonLeft,
+                  currentCardIndex === 0 && styles.navButtonDisabled,
+                ]}
+              >
+                <Text style={styles.navButtonText}>Previous</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={handleNextCard}
+                disabled={currentCardIndex === currentModule.cards.length - 1}
+                style={[
+                  styles.navButton,
+                  styles.navButtonRight,
+                  currentCardIndex === currentModule.cards.length - 1 && styles.navButtonDisabled,
+                ]}
+              >
+                <Text style={styles.navButtonText}>Next</Text>
+              </TouchableOpacity>
+            </View>
+          </ScrollView>
         </SafeAreaView>
       </LinearGradient>
     );
@@ -2531,108 +2609,185 @@ const styles = StyleSheet.create({
     marginTop: 16,
     color: '#d7dcff',
     fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.3,
   },
   header: {
-    marginBottom: 24,
+    marginBottom: 28,
   },
   heading: {
     color: '#ffffff',
-    fontSize: 28,
-    fontWeight: '700',
-    marginBottom: 6,
+    fontSize: 32,
+    fontWeight: '800',
+    marginBottom: 8,
+    letterSpacing: -0.5,
+    lineHeight: 38,
   },
   subheading: {
     color: '#c0c5ff',
     fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+    lineHeight: 22,
   },
   overallProgress: {
-    marginTop: 18,
+    marginTop: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 16,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   overallProgressText: {
     color: '#f5f6ff',
-    fontSize: 14,
-    marginBottom: 10,
+    fontSize: 15,
+    marginBottom: 12,
+    fontWeight: '600',
+    letterSpacing: 0.2,
   },
   progressTrack: {
-    height: 8,
+    height: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(255, 255, 255, 0.16)',
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   progressTrackLight: {
     marginTop: 10,
-    height: 8,
+    height: 10,
     borderRadius: 999,
-    backgroundColor: 'rgba(255, 255, 255, 0.28)',
+    backgroundColor: 'rgba(255, 255, 255, 0.25)',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 2,
   },
   progressTrackDark: {
     marginTop: 14,
-    height: 10,
+    height: 12,
     borderRadius: 999,
-    backgroundColor: 'rgba(12, 15, 36, 0.55)',
+    backgroundColor: 'rgba(12, 15, 36, 0.6)',
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3,
+    elevation: 2,
   },
   progressFill: {
     height: '100%',
     borderRadius: 999,
     backgroundColor: '#ffffff',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.5,
+    shadowRadius: 4,
+    elevation: 4,
   },
   progressFillLight: {
     height: '100%',
     borderRadius: 999,
-    backgroundColor: 'rgba(255, 255, 255, 0.92)',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.4,
+    shadowRadius: 3,
+    elevation: 3,
   },
   moduleListContent: {
     paddingBottom: 120,
   },
   moduleCardWrapper: {
-    marginBottom: 18,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   moduleCard: {
-    borderRadius: 22,
-    padding: 22,
-    minHeight: 150,
+    borderRadius: 24,
+    padding: 24,
+    minHeight: 160,
     justifyContent: 'space-between',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
   },
   moduleCardDisabled: {
-    opacity: 0.55,
+    opacity: 0.5,
   },
   moduleTitle: {
     color: '#ffffff',
-    fontSize: 20,
-    fontWeight: '600',
-    marginBottom: 8,
+    fontSize: 22,
+    fontWeight: '700',
+    marginBottom: 10,
+    letterSpacing: -0.3,
+    lineHeight: 28,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   moduleDescription: {
     color: '#f6f7ff',
-    fontSize: 14,
-    marginBottom: 12,
+    fontSize: 15,
+    marginBottom: 14,
+    lineHeight: 21,
+    opacity: 0.95,
+    letterSpacing: 0.1,
   },
   moduleProgressText: {
     color: '#ffffff',
-    fontSize: 14,
-    fontWeight: '500',
+    fontSize: 15,
+    fontWeight: '600',
+    letterSpacing: 0.2,
+    marginBottom: 8,
   },
   lockOverlay: {
     ...StyleSheet.absoluteFillObject,
-    borderRadius: 22,
-    backgroundColor: 'rgba(6, 10, 28, 0.65)',
+    borderRadius: 24,
+    backgroundColor: 'rgba(6, 10, 28, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   lockText: {
     color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 4,
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 6,
+    letterSpacing: 0.3,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   lockSubtext: {
     color: '#d9ddff',
-    fontSize: 13,
+    fontSize: 14,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+    opacity: 0.9,
   },
   moduleScreen: {
     flex: 1,
+  },
+  moduleScrollView: {
+    flex: 1,
+  },
+  moduleScrollContent: {
+    padding: 20,
+    paddingBottom: 40,
   },
   moduleScreenContent: {
     flex: 1,
@@ -2641,150 +2796,307 @@ const styles = StyleSheet.create({
   moduleHeader: {
     flexDirection: 'row',
     alignItems: 'flex-start',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   backButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 14,
-    backgroundColor: 'rgba(7, 11, 27, 0.45)',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
     marginRight: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   backButtonText: {
     color: '#ffffff',
-    fontSize: 14,
+    fontSize: 15,
     fontWeight: '600',
+    letterSpacing: 0.2,
   },
   moduleHeaderText: {
     flex: 1,
   },
   moduleHeading: {
     color: '#ffffff',
-    fontSize: 26,
-    fontWeight: '700',
-    marginBottom: 6,
+    fontSize: 28,
+    fontWeight: '800',
+    marginBottom: 8,
+    letterSpacing: -0.5,
+    lineHeight: 34,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   moduleSubheading: {
     color: '#f0f4ff',
-    fontSize: 15,
+    fontSize: 16,
+    fontWeight: '500',
+    letterSpacing: 0.2,
+    lineHeight: 22,
+    opacity: 0.9,
   },
   moduleProgressCard: {
-    backgroundColor: 'rgba(8, 12, 28, 0.55)',
-    borderRadius: 18,
-    paddingVertical: 16,
-    paddingHorizontal: 18,
-    marginBottom: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 20,
+    paddingVertical: 18,
+    paddingHorizontal: 20,
+    marginBottom: 20,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.25,
+    shadowRadius: 6,
+    elevation: 4,
   },
   moduleProgressStrong: {
     color: '#ffffff',
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 17,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   resetButton: {
-    marginTop: 14,
-    paddingVertical: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.35)',
+    marginTop: 16,
+    paddingVertical: 14,
+    borderRadius: 16,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
     alignItems: 'center',
-    backgroundColor: 'rgba(6, 10, 26, 0.35)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   resetButtonDisabled: {
     opacity: 0.4,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
   },
   resetButtonText: {
     color: '#f5f7ff',
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.4,
+    fontSize: 14,
+    fontWeight: '700',
+    letterSpacing: 0.5,
     textTransform: 'uppercase',
   },
   resetButtonTextDisabled: {
-    color: 'rgba(245, 247, 255, 0.7)',
+    color: 'rgba(245, 247, 255, 0.6)',
   },
   successBanner: {
-    backgroundColor: 'rgba(6, 10, 26, 0.55)',
-    borderRadius: 18,
-    padding: 16,
-    marginBottom: 18,
+    backgroundColor: 'rgba(46, 213, 115, 0.15)',
+    borderRadius: 20,
+    padding: 20,
+    marginBottom: 20,
+    borderWidth: 1.5,
+    borderColor: 'rgba(46, 213, 115, 0.4)',
+    shadowColor: '#2ed573',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 5,
   },
   successTitle: {
-    color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '700',
-    marginBottom: 4,
+    color: '#2ed573',
+    fontSize: 20,
+    fontWeight: '800',
+    marginBottom: 6,
+    letterSpacing: 0.3,
   },
   successBody: {
     color: '#e4e7ff',
-    fontSize: 14,
+    fontSize: 15,
+    lineHeight: 21,
+    fontWeight: '500',
+  },
+  celebrationBanner: {
+    backgroundColor: 'rgba(255, 215, 0, 0.2)',
+    borderRadius: 24,
+    padding: 28,
+    marginBottom: 24,
+    borderWidth: 2.5,
+    borderColor: 'rgba(255, 215, 0, 0.6)',
+    alignItems: 'center',
+    shadowColor: '#FFD700',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
+  },
+  celebrationTitle: {
+    color: '#FFD700',
+    fontSize: 28,
+    fontWeight: '900',
+    marginBottom: 14,
+    marginTop: 4,
+    textAlign: 'center',
+    letterSpacing: 1.2,
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
+  },
+  celebrationSubtitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: '700',
+    marginBottom: 10,
+    textAlign: 'center',
+    letterSpacing: 0.3,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
+  },
+  celebrationBody: {
+    color: '#f0f4ff',
+    fontSize: 16,
+    textAlign: 'center',
+    lineHeight: 24,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
   cardProgressDots: {
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 18,
+    marginBottom: 20,
+    paddingVertical: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+    borderRadius: 16,
+    marginHorizontal: -10,
+    paddingHorizontal: 10,
   },
   progressDot: {
     height: 10,
     width: 10,
     borderRadius: 5,
-    backgroundColor: 'rgba(255, 255, 255, 0.25)',
-    marginHorizontal: 4,
-    marginVertical: 4,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    marginHorizontal: 5,
+    marginVertical: 5,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
   },
   progressDotCompleted: {
-    backgroundColor: 'rgba(255, 255, 255, 0.65)',
+    backgroundColor: 'rgba(46, 213, 115, 0.8)',
+    borderColor: 'rgba(46, 213, 115, 0.5)',
+    shadowColor: '#2ed573',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.6,
+    shadowRadius: 4,
+    elevation: 3,
   },
   progressDotActive: {
     backgroundColor: '#ffffff',
     width: 14,
     height: 14,
     borderRadius: 7,
+    borderWidth: 2,
+    borderColor: 'rgba(255, 255, 255, 0.5)',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.8,
+    shadowRadius: 6,
+    elevation: 5,
   },
-  cardContainer: {
-    backgroundColor: 'rgba(6, 10, 26, 0.6)',
-    borderRadius: 22,
-    padding: 20,
-    flex: 1,
+  cardCounterContainer: {
+    alignItems: 'center',
+    marginBottom: 18,
+    marginTop: 4,
+    paddingVertical: 10,
   },
   cardCounter: {
     color: '#dfe3ff',
-    fontSize: 14,
-    marginBottom: 12,
+    fontSize: 16,
+    fontWeight: '700',
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+    opacity: 0.9,
+  },
+  cardScrollWrapper: {
+    marginBottom: 20,
+    width: '100%',
+  },
+  cardHorizontalScroll: {
+    width: '100%',
+  },
+  cardHorizontalScrollContent: {
+    paddingHorizontal: 0,
+  },
+  cardSlide: {
+    width: SCREEN_WIDTH - 40,
+    paddingHorizontal: 0,
   },
   card: {
-    backgroundColor: 'rgba(8, 16, 38, 0.85)',
-    borderRadius: 20,
-    padding: 20,
-    marginBottom: 18,
-    minHeight: 180,
-    justifyContent: 'center',
-  },
-  cardRevealed: {
-    backgroundColor: 'rgba(10, 22, 52, 0.92)',
+    backgroundColor: 'rgba(8, 16, 38, 0.92)',
+    borderRadius: 24,
+    padding: 28,
+    minHeight: 380,
+    justifyContent: 'flex-start',
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.4,
+    shadowRadius: 16,
+    elevation: 10,
   },
   cardTitle: {
     color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 12,
+    fontSize: 24,
+    fontWeight: '800',
+    marginBottom: 20,
+    letterSpacing: -0.3,
+    lineHeight: 30,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 3,
   },
   cardContent: {
     color: '#f4f6ff',
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 17,
+    lineHeight: 26,
+    fontWeight: '400',
+    letterSpacing: 0.1,
   },
-  cardHint: {
-    color: 'rgba(244, 246, 255, 0.6)',
-    fontStyle: 'italic',
+  cardActionsContainer: {
+    marginBottom: 20,
+    paddingHorizontal: 0,
   },
   cardActions: {
     flexDirection: 'row',
     marginBottom: 18,
   },
+  completeButton: {
+    backgroundColor: '#ffffff',
+    paddingVertical: 18,
+    borderRadius: 20,
+    alignItems: 'center',
+    width: '100%',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  completeButtonText: {
+    color: '#121532',
+    fontWeight: '800',
+    fontSize: 17,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
+  },
+  completeButtonDisabled: {
+    opacity: 0.5,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    shadowOpacity: 0.2,
+  },
   primaryButton: {
-    flex: 1,
-    marginRight: 10,
     backgroundColor: '#ffffff',
     paddingVertical: 14,
     borderRadius: 16,
@@ -2794,6 +3106,10 @@ const styles = StyleSheet.create({
     color: '#121532',
     fontWeight: '700',
     fontSize: 14,
+  },
+  primaryButtonDisabled: {
+    opacity: 0.6,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
   },
   secondaryButton: {
     flex: 1,
@@ -2816,170 +3132,221 @@ const styles = StyleSheet.create({
   navigationRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 12,
+    marginBottom: 20,
   },
   navButton: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 12,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.65)',
+    paddingVertical: 16,
+    borderRadius: 18,
+    borderWidth: 1.5,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
   navButtonLeft: {
-    marginRight: 8,
+    marginRight: 6,
   },
   navButtonRight: {
-    marginLeft: 8,
+    marginLeft: 6,
   },
   navButtonDisabled: {
-    opacity: 0.5,
+    opacity: 0.35,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    backgroundColor: 'rgba(255, 255, 255, 0.05)',
   },
   navButtonText: {
     color: '#ffffff',
-    fontWeight: '600',
-    fontSize: 14,
+    fontWeight: '700',
+    fontSize: 16,
+    letterSpacing: 0.3,
   },
   cardDetails: {
-    marginTop: 8,
+    marginTop: 12,
   },
   cardSection: {
-    marginBottom: 14,
+    marginBottom: 20,
+    paddingBottom: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
   },
   cardSectionLabel: {
     color: '#95a0d6',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.8,
+    fontSize: 13,
+    fontWeight: '800',
+    letterSpacing: 1.2,
     textTransform: 'uppercase',
-    marginBottom: 6,
+    marginBottom: 10,
+    opacity: 0.9,
   },
   cardSectionText: {
     color: '#f4f6ff',
-    fontSize: 16,
-    lineHeight: 24,
-  },
-  resetButton: {
-    marginTop: 10,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-    borderRadius: 16,
-    paddingVertical: 14,
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.7)',
-  },
-  resetButtonDisabled: {
-    opacity: 0.5,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  resetButtonText: {
-    color: '#ffffff',
-    fontWeight: '600',
-    fontSize: 14,
-  },
-  resetButtonTextDisabled: {
-    color: 'rgba(255, 255, 255, 0.5)',
+    fontSize: 17,
+    lineHeight: 26,
+    fontWeight: '400',
+    letterSpacing: 0.1,
   },
   headerTopRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 18,
+    marginBottom: 20,
   },
   headerTitleContainer: {
     flex: 1,
   },
   journalButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 18,
-    borderRadius: 14,
-    backgroundColor: 'rgba(79, 172, 254, 0.2)',
-    borderWidth: 1,
-    borderColor: 'rgba(79, 172, 254, 0.5)',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 16,
+    backgroundColor: 'rgba(79, 172, 254, 0.25)',
+    borderWidth: 1.5,
+    borderColor: 'rgba(79, 172, 254, 0.6)',
     marginLeft: 12,
+    shadowColor: '#4facfe',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
+    elevation: 3,
   },
   journalButtonText: {
     color: '#4facfe',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
   journalListContent: {
     paddingBottom: 120,
   },
   journalEntryCard: {
-    marginBottom: 18,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 6,
   },
   journalEntryGradient: {
-    borderRadius: 22,
-    padding: 22,
-    minHeight: 120,
+    borderRadius: 24,
+    padding: 24,
+    minHeight: 130,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.4,
+    shadowRadius: 12,
+    elevation: 8,
   },
   journalEntryHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    marginBottom: 12,
+    marginBottom: 14,
   },
   journalEntryTitle: {
     color: '#ffffff',
-    fontSize: 18,
-    fontWeight: '600',
+    fontSize: 20,
+    fontWeight: '700',
     flex: 1,
+    letterSpacing: -0.2,
+    lineHeight: 26,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   journalEntryDate: {
     color: 'rgba(255, 255, 255, 0.7)',
-    fontSize: 12,
+    fontSize: 13,
     marginLeft: 12,
+    fontWeight: '500',
+    letterSpacing: 0.2,
   },
   journalEntryPreview: {
     color: '#f6f7ff',
-    fontSize: 14,
-    lineHeight: 20,
+    fontSize: 15,
+    lineHeight: 22,
+    fontWeight: '400',
+    letterSpacing: 0.1,
   },
   journalEntryEmpty: {
     color: 'rgba(255, 255, 255, 0.5)',
-    fontSize: 14,
+    fontSize: 15,
     fontStyle: 'italic',
+    fontWeight: '400',
+    letterSpacing: 0.1,
   },
   journalEditorContainer: {
     flex: 1,
-    backgroundColor: 'rgba(6, 10, 26, 0.6)',
-    borderRadius: 22,
-    padding: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    borderRadius: 24,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.15)',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.25,
+    shadowRadius: 8,
+    elevation: 5,
   },
   journalTextInput: {
     flex: 1,
-    backgroundColor: 'rgba(8, 16, 38, 0.85)',
+    backgroundColor: 'rgba(8, 16, 38, 0.9)',
     borderRadius: 20,
-    padding: 20,
+    padding: 22,
     color: '#ffffff',
-    fontSize: 16,
-    lineHeight: 24,
-    minHeight: 300,
+    fontSize: 17,
+    lineHeight: 26,
+    minHeight: 320,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.1)',
+    fontWeight: '400',
+    letterSpacing: 0.1,
   },
   journalSaveButton: {
-    marginTop: 18,
+    marginTop: 20,
     backgroundColor: '#ffffff',
-    paddingVertical: 14,
-    borderRadius: 16,
+    paddingVertical: 16,
+    borderRadius: 18,
     alignItems: 'center',
+    shadowColor: '#ffffff',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.4,
+    shadowRadius: 8,
+    elevation: 6,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.3)',
   },
   journalSaveButtonText: {
     color: '#121532',
-    fontWeight: '700',
-    fontSize: 16,
+    fontWeight: '800',
+    fontSize: 17,
+    letterSpacing: 0.3,
+    textTransform: 'uppercase',
   },
   moduleJournalButton: {
-    paddingVertical: 8,
-    paddingHorizontal: 14,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderWidth: 1,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+    borderWidth: 1.5,
     borderColor: 'rgba(255, 255, 255, 0.4)',
     marginLeft: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.2,
+    shadowRadius: 3,
+    elevation: 2,
   },
   moduleJournalButtonText: {
     color: '#ffffff',
-    fontSize: 12,
-    fontWeight: '600',
+    fontSize: 13,
+    fontWeight: '700',
+    letterSpacing: 0.2,
   },
 });

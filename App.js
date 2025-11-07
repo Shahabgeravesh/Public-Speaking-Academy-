@@ -2435,10 +2435,14 @@ export default function App() {
         <StatusBar style="light" />
         <View style={styles.container}>
           <View style={styles.header}>
-            <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
-              <Text style={styles.backButtonText}>Back</Text>
-            </TouchableOpacity>
-            <Text style={styles.heading}>Journal</Text>
+            <View style={styles.headerTopRow}>
+              <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
+                <Text style={styles.backButtonText}>Back</Text>
+              </TouchableOpacity>
+              <View style={styles.headerTitleContainer}>
+                <Text style={styles.heading}>Journal</Text>
+              </View>
+            </View>
             <Text style={styles.subheading}>Your key takeaways from each module</Text>
           </View>
           <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.journalListContent}>

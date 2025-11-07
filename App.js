@@ -1998,36 +1998,6 @@ export default function App() {
     return new Set(progress.completedCards[currentModule.id] || []);
   }, [currentModule, progress]);
 
-  const handleNextCard = useCallback(() => {
-    if (!currentModule) {
-      return;
-    }
-    const nextIndex = Math.min(currentCardIndex + 1, currentModule.cards.length - 1);
-    setCurrentCardIndex(nextIndex);
-    if (cardScrollViewRef.current) {
-      const cardWidth = SCREEN_WIDTH - 40;
-      cardScrollViewRef.current.scrollTo({
-        x: nextIndex * cardWidth,
-        animated: true,
-      });
-    }
-  }, [currentModule, currentCardIndex]);
-
-  const handlePrevCard = useCallback(() => {
-    if (!currentModule) {
-      return;
-    }
-    const prevIndex = Math.max(currentCardIndex - 1, 0);
-    setCurrentCardIndex(prevIndex);
-    if (cardScrollViewRef.current) {
-      const cardWidth = SCREEN_WIDTH - 40;
-      cardScrollViewRef.current.scrollTo({
-        x: prevIndex * cardWidth,
-        animated: true,
-      });
-    }
-  }, [currentModule, currentCardIndex]);
-
   const handleCardScroll = useCallback((event) => {
     const offsetX = event.nativeEvent.contentOffset.x;
     const cardWidth = SCREEN_WIDTH - 40;
@@ -2441,31 +2411,6 @@ export default function App() {
                 <Text style={styles.completeButtonText}>
                   {completedIndexes.has(currentCardIndex) ? 'Completed ✓' : 'Mark complete'}
                 </Text>
-              </TouchableOpacity>
-            </View>
-
-            <View style={styles.navigationRow}>
-              <TouchableOpacity
-                onPress={handlePrevCard}
-                disabled={currentCardIndex === 0}
-                style={[
-                  styles.navButton,
-                  styles.navButtonLeft,
-                  currentCardIndex === 0 && styles.navButtonDisabled,
-                ]}
-              >
-                <Text style={styles.navButtonText}>Previous</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={handleNextCard}
-                disabled={currentCardIndex === currentModule.cards.length - 1}
-                style={[
-                  styles.navButton,
-                  styles.navButtonRight,
-                  currentCardIndex === currentModule.cards.length - 1 && styles.navButtonDisabled,
-                ]}
-              >
-                <Text style={styles.navButtonText}>Next</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
@@ -3128,43 +3073,6 @@ const styles = StyleSheet.create({
     color: '#ffffff',
     fontWeight: '600',
     fontSize: 14,
-  },
-  navigationRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 12,
-    marginBottom: 20,
-  },
-  navButton: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 16,
-    borderRadius: 18,
-    borderWidth: 1.5,
-    borderColor: 'rgba(255, 255, 255, 0.4)',
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  navButtonLeft: {
-    marginRight: 6,
-  },
-  navButtonRight: {
-    marginLeft: 6,
-  },
-  navButtonDisabled: {
-    opacity: 0.35,
-    borderColor: 'rgba(255, 255, 255, 0.2)',
-    backgroundColor: 'rgba(255, 255, 255, 0.05)',
-  },
-  navButtonText: {
-    color: '#ffffff',
-    fontWeight: '700',
-    fontSize: 16,
-    letterSpacing: 0.3,
   },
   cardDetails: {
     marginTop: 12,

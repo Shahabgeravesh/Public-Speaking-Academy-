@@ -3,7 +3,6 @@
     "name": "Public Speaking Academy",
     "slug": "public-speaking-academy",
     "version": "1.0.0",
-    "sdkVersion": "54.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -17,7 +16,6 @@
       "supportsTablet": true,
       "bundleIdentifier": "com.publicspeakingacademy.app",
       "buildNumber": "1.0.0",
-      "deploymentTarget": "13.0",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       },
@@ -37,7 +35,6 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "privacy": "public",
     "extra": {
       "eas": {
         "projectId": "your-project-id-here"

@@ -2325,8 +2325,12 @@ export default function App() {
                 <Text style={styles.backButtonText}>Back</Text>
               </TouchableOpacity>
               <View style={styles.moduleHeaderText}>
-                <Text style={styles.moduleHeading}>{currentModule.title}</Text>
-                <Text style={styles.moduleSubheading}>{currentModule.description}</Text>
+                <Text style={styles.moduleHeading} numberOfLines={2} adjustsFontSizeToFit>
+                  {currentModule.title}
+                </Text>
+                <Text style={styles.moduleSubheading} numberOfLines={2}>
+                  {currentModule.description}
+                </Text>
               </View>
               <TouchableOpacity
                 onPress={() => handleOpenJournalEntry(currentModule.id)}
@@ -2807,6 +2811,7 @@ const styles = StyleSheet.create({
   moduleScrollContent: {
     padding: 20,
     paddingBottom: 40,
+    paddingTop: 8,
   },
   moduleScreenContent: {
     flex: 1,
@@ -2816,13 +2821,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 24,
+    minHeight: 80,
   },
   backButton: {
     paddingVertical: 12,
-    paddingHorizontal: 20,
+    paddingHorizontal: 18,
     borderRadius: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.12)',
-    marginRight: 16,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.2)',
     shadowColor: '#000',
@@ -2830,6 +2835,9 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 4,
     elevation: 3,
+    alignSelf: 'flex-start',
+    minWidth: 70,
+    marginRight: 12,
   },
   backButtonText: {
     color: '#ffffff',
@@ -2839,32 +2847,36 @@ const styles = StyleSheet.create({
   },
   moduleHeaderText: {
     flex: 1,
+    minWidth: 0,
+    paddingRight: 8,
   },
   moduleHeading: {
     color: '#ffffff',
-    fontSize: 28,
+    fontSize: 26,
     fontWeight: '800',
-    marginBottom: 8,
-    letterSpacing: -0.5,
-    lineHeight: 34,
+    marginBottom: 6,
+    letterSpacing: -0.4,
+    lineHeight: 32,
     textShadowColor: 'rgba(0, 0, 0, 0.3)',
     textShadowOffset: { width: 0, height: 1 },
     textShadowRadius: 3,
+    flexShrink: 1,
   },
   moduleSubheading: {
     color: '#f0f4ff',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '500',
-    letterSpacing: 0.2,
-    lineHeight: 22,
-    opacity: 0.9,
+    letterSpacing: 0.1,
+    lineHeight: 20,
+    opacity: 0.95,
+    flexShrink: 1,
   },
   moduleProgressCard: {
     backgroundColor: 'rgba(255, 255, 255, 0.08)',
     borderRadius: 20,
-    paddingVertical: 18,
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    paddingVertical: 20,
+    paddingHorizontal: 22,
+    marginBottom: 24,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.15)',
     shadowColor: '#000',
@@ -2985,20 +2997,19 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'center',
-    marginBottom: 20,
-    paddingVertical: 12,
+    marginBottom: 16,
+    paddingVertical: 14,
     backgroundColor: 'rgba(255, 255, 255, 0.05)',
     borderRadius: 16,
-    marginHorizontal: -10,
-    paddingHorizontal: 10,
+    paddingHorizontal: 12,
   },
   progressDot: {
     height: 10,
     width: 10,
     borderRadius: 5,
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    marginHorizontal: 5,
-    marginVertical: 5,
+    marginHorizontal: 4,
+    marginVertical: 4,
     borderWidth: 1,
     borderColor: 'rgba(255, 255, 255, 0.1)',
   },
@@ -3027,17 +3038,17 @@ const styles = StyleSheet.create({
   },
   cardCounterContainer: {
     alignItems: 'center',
-    marginBottom: 18,
-    marginTop: 4,
-    paddingVertical: 10,
+    marginBottom: 20,
+    marginTop: 6,
+    paddingVertical: 12,
   },
   cardCounter: {
     color: '#dfe3ff',
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: '700',
     letterSpacing: 0.5,
     textTransform: 'uppercase',
-    opacity: 0.9,
+    opacity: 0.95,
   },
   cardScrollWrapper: {
     marginBottom: 20,
@@ -3093,7 +3104,8 @@ const styles = StyleSheet.create({
     letterSpacing: 0.1,
   },
   cardActionsContainer: {
-    marginBottom: 20,
+    marginTop: 8,
+    marginBottom: 24,
     paddingHorizontal: 0,
   },
   cardActions: {
@@ -3325,22 +3337,25 @@ const styles = StyleSheet.create({
     textTransform: 'uppercase',
   },
   moduleJournalButton: {
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-    borderRadius: 14,
+    paddingVertical: 12,
+    paddingHorizontal: 18,
+    borderRadius: 16,
     backgroundColor: 'rgba(255, 255, 255, 0.15)',
     borderWidth: 1.5,
     borderColor: 'rgba(255, 255, 255, 0.4)',
-    marginLeft: 12,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.2,
     shadowRadius: 3,
     elevation: 2,
+    alignSelf: 'flex-start',
+    minWidth: 80,
+    marginLeft: 8,
+    flexShrink: 0,
   },
   moduleJournalButtonText: {
     color: '#ffffff',
-    fontSize: 13,
+    fontSize: 14,
     fontWeight: '700',
     letterSpacing: 0.2,
   },

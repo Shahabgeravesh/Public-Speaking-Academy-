@@ -18,10 +18,7 @@
       "buildNumber": "1.0.0",
       "deploymentTarget": "13.0",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false,
-        "NSUserTrackingUsageDescription": "This app does not track users across apps or websites.",
-        "NSPhotoLibraryUsageDescription": "This app does not access your photo library.",
-        "NSCameraUsageDescription": "This app does not access your camera."
+        "ITSAppUsesNonExemptEncryption": false
       },
       "config": {
         "usesNonExemptEncryption": false

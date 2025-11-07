@@ -9,11 +9,13 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 
 const STORAGE_KEY = 'PSA_PROGRESS_V2';
+const JOURNAL_STORAGE_KEY = 'PSA_JOURNAL_V1';
 
 const createCards = (moduleId, items) =>
   items.map((content, index) => ({
@@ -1772,32 +1774,47 @@ const getModuleById = (id) => MODULES.find((module) => module.id === id) || null
 
 export default function App() {
   const [progress, setProgress] = useState({ completedCards: {} });
+  const [journalEntries, setJournalEntries] = useState({});
   const [currentModuleId, setCurrentModuleId] = useState(null);
   const [currentCardIndex, setCurrentCardIndex] = useState(0);
   const [isCardRevealed, setIsCardRevealed] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'module', 'journalList', 'journalEntry'
+  const [editingModuleId, setEditingModuleId] = useState(null);
+  const [journalEntryText, setJournalEntryText] = useState('');
   const hasHydrated = useRef(false);
 
   useEffect(() => {
-    const loadProgress = async () => {
+    const loadData = async () => {
       try {
-        const stored = await AsyncStorage.getItem(STORAGE_KEY);
-        if (stored) {
-          const parsed = JSON.parse(stored);
+        const [storedProgress, storedJournal] = await Promise.all([
+          AsyncStorage.getItem(STORAGE_KEY),
+          AsyncStorage.getItem(JOURNAL_STORAGE_KEY),
+        ]);
+
+        if (storedProgress) {
+          const parsed = JSON.parse(storedProgress);
           if (parsed && parsed.completedCards) {
             setProgress({
               completedCards: parsed.completedCards,
             });
           }
         }
+
+        if (storedJournal) {
+          const parsed = JSON.parse(storedJournal);
+          if (parsed) {
+            setJournalEntries(parsed);
+          }
+        }
       } catch (error) {
-        console.warn('Failed to load progress', error);
+        console.warn('Failed to load data', error);
       } finally {
         setIsLoading(false);
       }
     };
 
-    loadProgress();
+    loadData();
   }, []);
 
   useEffect(() => {
@@ -1819,6 +1836,25 @@ export default function App() {
 
     persist();
   }, [progress, isLoading]);
+
+  useEffect(() => {
+    if (isLoading) {
+      return;
+    }
+    if (!hasHydrated.current) {
+      return;
+    }
+
+    const persistJournal = async () => {
+      try {
+        await AsyncStorage.setItem(JOURNAL_STORAGE_KEY, JSON.stringify(journalEntries));
+      } catch (error) {
+        console.warn('Failed to save journal', error);
+      }
+    };
+
+    persistJournal();
+  }, [journalEntries, isLoading]);
 
   const getModuleProgress = useCallback(
     (moduleId) => {
@@ -1876,6 +1912,7 @@ export default function App() {
       setCurrentModuleId(moduleId);
       setCurrentCardIndex(nextIndex);
       setIsCardRevealed(false);
+      setCurrentView('module');
     },
     [getNextUncompletedCardIndex, isModuleUnlocked],
   );
@@ -1884,7 +1921,51 @@ export default function App() {
     setCurrentModuleId(null);
     setCurrentCardIndex(0);
     setIsCardRevealed(false);
+    setCurrentView('home');
   }, []);
+
+  const handleOpenJournal = useCallback(() => {
+    setCurrentView('journalList');
+  }, []);
+
+  const handleOpenJournalEntry = useCallback((moduleId) => {
+    const entry = journalEntries[moduleId];
+    setEditingModuleId(moduleId);
+    setJournalEntryText(entry?.content || '');
+    setCurrentView('journalEntry');
+  }, [journalEntries]);
+
+  const handleSaveJournalEntry = useCallback(
+    (moduleId, content) => {
+      setJournalEntries((prev) => ({
+        ...prev,
+        [moduleId]: {
+          content,
+          date: new Date().toISOString(),
+        },
+      }));
+      setCurrentView('journalList');
+      setEditingModuleId(null);
+    },
+    [],
+  );
+
+  const handlePromptJournal = useCallback((moduleId) => {
+    Alert.alert(
+      'Module Complete!',
+      'Would you like to write a journal entry about your key takeaways?',
+      [
+        {
+          text: 'Skip',
+          style: 'cancel',
+        },
+        {
+          text: 'Write Entry',
+          onPress: () => handleOpenJournalEntry(moduleId),
+        },
+      ],
+    );
+  }, [handleOpenJournalEntry]);
 
   const currentModule = useMemo(() => getModuleById(currentModuleId), [currentModuleId]);
 
@@ -1964,6 +2045,9 @@ export default function App() {
     const moduleLength = currentModule.cards.length;
     if (updatedSet.size >= moduleLength) {
       setIsCardRevealed(true);
+      setTimeout(() => {
+        handlePromptJournal(moduleId);
+      }, 500);
       return;
     }
 
@@ -1978,7 +2062,7 @@ export default function App() {
       setCurrentCardIndex(cardIndex + 1);
       setIsCardRevealed(false);
     }
-  }, [currentModule, currentCardIndex, progress]);
+  }, [currentModule, currentCardIndex, progress, handlePromptJournal]);
 
   const handleResetModule = useCallback(() => {
     if (!currentModule) {
@@ -2056,8 +2140,15 @@ export default function App() {
       <StatusBar style="light" />
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.heading}>Public Speaking Academy</Text>
-          <Text style={styles.subheading}>Master every skill, one card at a time.</Text>
+          <View style={styles.headerTopRow}>
+            <View style={styles.headerTitleContainer}>
+              <Text style={styles.heading}>Public Speaking Academy</Text>
+              <Text style={styles.subheading}>Master every skill, one card at a time.</Text>
+            </View>
+            <TouchableOpacity onPress={handleOpenJournal} style={styles.journalButton}>
+              <Text style={styles.journalButtonText}>Journal</Text>
+            </TouchableOpacity>
+          </View>
           <View style={styles.overallProgress}>
             <Text style={styles.overallProgressText}>
               Overall progress: {overallProgress.completed} / {overallProgress.total} cards ({overallPercent}%)
@@ -2167,6 +2258,12 @@ export default function App() {
                 <Text style={styles.moduleHeading}>{currentModule.title}</Text>
                 <Text style={styles.moduleSubheading}>{currentModule.description}</Text>
               </View>
+              <TouchableOpacity
+                onPress={() => handleOpenJournalEntry(currentModule.id)}
+                style={styles.moduleJournalButton}
+              >
+                <Text style={styles.moduleJournalButtonText}>Journal</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.moduleProgressCard}>
@@ -2299,6 +2396,114 @@ export default function App() {
     );
   };
 
+  const renderJournalList = () => {
+    const entriesWithModules = MODULES.map((module) => ({
+      module,
+      entry: journalEntries[module.id],
+    }));
+
+    return (
+      <SafeAreaView style={styles.safeArea}>
+        <StatusBar style="light" />
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
+              <Text style={styles.backButtonText}>Back</Text>
+            </TouchableOpacity>
+            <Text style={styles.heading}>Journal</Text>
+            <Text style={styles.subheading}>Your key takeaways from each module</Text>
+          </View>
+          <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.journalListContent}>
+            {entriesWithModules.map(({ module, entry }) => (
+              <TouchableOpacity
+                key={module.id}
+                onPress={() => handleOpenJournalEntry(module.id)}
+                style={styles.journalEntryCard}
+              >
+                <LinearGradient colors={module.gradient} style={styles.journalEntryGradient}>
+                  <View style={styles.journalEntryHeader}>
+                    <Text style={styles.journalEntryTitle}>{module.title}</Text>
+                    {entry && (
+                      <Text style={styles.journalEntryDate}>
+                        {new Date(entry.date).toLocaleDateString()}
+                      </Text>
+                    )}
+                  </View>
+                  {entry ? (
+                    <Text style={styles.journalEntryPreview} numberOfLines={2}>
+                      {entry.content}
+                    </Text>
+                  ) : (
+                    <Text style={styles.journalEntryEmpty}>Tap to write your takeaways...</Text>
+                  )}
+                </LinearGradient>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </SafeAreaView>
+    );
+  };
+
+  const renderJournalEntry = () => {
+    if (!editingModuleId) {
+      return null;
+    }
+    const module = getModuleById(editingModuleId);
+    if (!module) {
+      return null;
+    }
+
+    return (
+      <LinearGradient colors={module.gradient} style={styles.moduleScreen}>
+        <SafeAreaView style={styles.safeAreaTransparent}>
+          <StatusBar style="light" />
+          <View style={styles.moduleScreenContent}>
+            <View style={styles.moduleHeader}>
+              <TouchableOpacity
+                onPress={() => {
+                  setCurrentView('journalList');
+                  setEditingModuleId(null);
+                }}
+                style={styles.backButton}
+              >
+                <Text style={styles.backButtonText}>Back</Text>
+              </TouchableOpacity>
+              <View style={styles.moduleHeaderText}>
+                <Text style={styles.moduleHeading}>Journal: {module.title}</Text>
+                <Text style={styles.moduleSubheading}>Write your key takeaways and reflections</Text>
+              </View>
+            </View>
+
+            <View style={styles.journalEditorContainer}>
+              <TextInput
+                style={styles.journalTextInput}
+                multiline
+                placeholder="What are your key takeaways from this module? What did you learn? What will you practice?"
+                placeholderTextColor="rgba(255, 255, 255, 0.5)"
+                value={journalEntryText}
+                onChangeText={setJournalEntryText}
+                textAlignVertical="top"
+              />
+              <TouchableOpacity
+                onPress={() => handleSaveJournalEntry(editingModuleId, journalEntryText)}
+                style={styles.journalSaveButton}
+              >
+                <Text style={styles.journalSaveButtonText}>Save Entry</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </SafeAreaView>
+      </LinearGradient>
+    );
+  };
+
+  if (currentView === 'journalList') {
+    return renderJournalList();
+  }
+  if (currentView === 'journalEntry') {
+    return renderJournalEntry();
+  }
   return currentModule ? renderModuleScreen() : renderHomeScreen();
 }
 
@@ -2673,5 +2878,108 @@ const styles = StyleSheet.create({
   },
   resetButtonTextDisabled: {
     color: 'rgba(255, 255, 255, 0.5)',
+  },
+  headerTopRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 18,
+  },
+  headerTitleContainer: {
+    flex: 1,
+  },
+  journalButton: {
+    paddingVertical: 10,
+    paddingHorizontal: 18,
+    borderRadius: 14,
+    backgroundColor: 'rgba(79, 172, 254, 0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(79, 172, 254, 0.5)',
+    marginLeft: 12,
+  },
+  journalButtonText: {
+    color: '#4facfe',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  journalListContent: {
+    paddingBottom: 120,
+  },
+  journalEntryCard: {
+    marginBottom: 18,
+  },
+  journalEntryGradient: {
+    borderRadius: 22,
+    padding: 22,
+    minHeight: 120,
+  },
+  journalEntryHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 12,
+  },
+  journalEntryTitle: {
+    color: '#ffffff',
+    fontSize: 18,
+    fontWeight: '600',
+    flex: 1,
+  },
+  journalEntryDate: {
+    color: 'rgba(255, 255, 255, 0.7)',
+    fontSize: 12,
+    marginLeft: 12,
+  },
+  journalEntryPreview: {
+    color: '#f6f7ff',
+    fontSize: 14,
+    lineHeight: 20,
+  },
+  journalEntryEmpty: {
+    color: 'rgba(255, 255, 255, 0.5)',
+    fontSize: 14,
+    fontStyle: 'italic',
+  },
+  journalEditorContainer: {
+    flex: 1,
+    backgroundColor: 'rgba(6, 10, 26, 0.6)',
+    borderRadius: 22,
+    padding: 20,
+  },
+  journalTextInput: {
+    flex: 1,
+    backgroundColor: 'rgba(8, 16, 38, 0.85)',
+    borderRadius: 20,
+    padding: 20,
+    color: '#ffffff',
+    fontSize: 16,
+    lineHeight: 24,
+    minHeight: 300,
+  },
+  journalSaveButton: {
+    marginTop: 18,
+    backgroundColor: '#ffffff',
+    paddingVertical: 14,
+    borderRadius: 16,
+    alignItems: 'center',
+  },
+  journalSaveButtonText: {
+    color: '#121532',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  moduleJournalButton: {
+    paddingVertical: 8,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.4)',
+    marginLeft: 12,
+  },
+  moduleJournalButtonText: {
+    color: '#ffffff',
+    fontSize: 12,
+    fontWeight: '600',
   },
 });

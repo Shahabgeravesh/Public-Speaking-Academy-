@@ -39,3 +39,11 @@ yarn-error.*
 # generated native folders
 /ios
 /android
+
+# EAS
+google-service-account.json
+*.p12
+*.mobileprovision
+
+# EAS build artifacts
+.eas-build-*

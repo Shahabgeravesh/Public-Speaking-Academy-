@@ -197,3 +197,46 @@ Start your journey to confident communication today!
 ## Privacy Policy URL
 (Required - Add your privacy policy URL)
 
+---
+
+## App Store Categories
+
+### Primary Category
+**Education**
+
+**Why:** Public Speaking Academy is fundamentally a learning and training app. It provides structured educational content, lessons, and practice exercises to teach users public speaking skills. The app fits perfectly in the Education category as it offers:
+- Structured learning modules
+- Educational content and lessons
+- Practice exercises
+- Progress tracking for learning
+
+### Secondary Category
+**Productivity**
+
+**Why:** Public speaking skills directly impact professional productivity and career advancement. The app helps users improve their:
+- Professional communication skills
+- Presentation abilities
+- Workplace confidence
+- Career development
+
+**Alternative Secondary Category (if Productivity not available):**
+**Business**
+
+**Why:** Public speaking is a critical business skill. The app helps professionals:
+- Improve business communication
+- Enhance presentation skills
+- Develop leadership abilities
+- Excel in professional settings
+
+### Recommended Category Selection:
+1. **Primary:** Education
+2. **Secondary:** Productivity
+
+This combination positions your app as both a learning tool and a professional development resource, maximizing visibility in both categories.
+
+### Category Benefits:
+- **Education:** Reaches users actively seeking learning apps and educational content
+- **Productivity:** Targets professionals and working individuals looking to improve job-related skills
+- Better discoverability across both categories
+- Appeals to students (Education) and professionals (Productivity)
+

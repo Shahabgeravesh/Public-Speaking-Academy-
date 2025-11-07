@@ -577,149 +577,1109 @@ const LANGUAGE_TIGHTENING_CARDS = [
   },
 ];
 
-const STORYTELLING_CARDS = createCards('storytelling', [
-  'Draft a story using the situation, challenge, action, result framework.',
-  'Identify a relatable character your audience can root for.',
-  'Set the scene with sensory detail to paint a vivid picture.',
-  'Clarify the stakes so listeners understand what could be lost.',
-  'Build tension by describing obstacles the character faced.',
-  "Highlight the turning point that changed the story's direction.",
-  'Show how the character transformed through the experience.',
-  "Connect the story's lesson directly to your core message.",
-  'Trim details that do not move the narrative forward.',
-  'Practice delivering the story with expressive vocal changes.',
-  'Use gestures that mirror the action taking place.',
-  'Pause at the climax to let anticipation grow.',
-  'Reinforce the takeaway with a concise moral at the end.',
-  'Invite the audience to imagine themselves inside the story.',
-  'Prepare a shorter backup story in case timing gets tight.',
-]);
+const STORYTELLING_CARDS = [
+  {
+    id: 'storytelling-1',
+    title: 'Start with the Punchline',
+    content: {
+      explanation: 'Weak speakers warm up too long. Strong speakers start with the key moment then explain after.',
+      example: '"Something funny happened today." Then tell it.',
+      practice: 'Tell a story today starting with the punchline first.',
+    },
+  },
+  {
+    id: 'storytelling-2',
+    title: 'One Character at a Time',
+    content: {
+      explanation: 'Do not introduce five people at once. It overloads the listener.',
+      example: '"My friend Alex said something." Then bring the second character after.',
+      practice: 'Tell a 20 second story with only one character first.',
+    },
+  },
+  {
+    id: 'storytelling-3',
+    title: 'One Sentence Equals One Event',
+    content: {
+      explanation: 'Do not stack three events in one long line.',
+      example: '"I woke up. I ate. I drove."',
+      practice: 'Tell 3 events in 3 short sentences.',
+    },
+  },
+  {
+    id: 'storytelling-4',
+    title: 'Set the Stakes',
+    content: {
+      explanation: 'Why should the listener care? State the importance quickly.',
+      example: '"This matters because it wasted my whole day."',
+      practice: 'Tell a story and state the stakes in the first 4 seconds.',
+    },
+  },
+  {
+    id: 'storytelling-5',
+    title: 'Keep Time Clean',
+    content: {
+      explanation: 'Avoid messy timeline jumps.',
+      example: '"First breakfast. Then store. Then home."',
+      practice: 'Tell a timeline story in order.',
+    },
+  },
+  {
+    id: 'storytelling-6',
+    title: 'Describe One Visual Detail',
+    content: {
+      explanation: 'One good detail is stronger than ten vague ones.',
+      example: '"Red cup" is stronger than "cup."',
+      practice: 'Tell one story with one strong visual detail.',
+    },
+  },
+  {
+    id: 'storytelling-7',
+    title: 'Cut the Backstory',
+    content: {
+      explanation: 'Story is not biography. Delete non-critical information.',
+      example: 'Skip childhood background. Go straight to the event.',
+      practice: 'Tell a story without life background.',
+    },
+  },
+  {
+    id: 'storytelling-8',
+    title: 'One Emotion Label',
+    content: {
+      explanation: 'Naming the emotion clarifies the point.',
+      example: '"I was annoyed."',
+      practice: 'Tell a story and name one emotion in one word.',
+    },
+  },
+  {
+    id: 'storytelling-9',
+    title: 'Tension to Release',
+    content: {
+      explanation: 'Story requires contrast. First show the problem, then the relief or resolution.',
+      example: '"Line was long. Then I got my coffee."',
+      practice: 'Tell one story with a problem plus resolution.',
+    },
+  },
+  {
+    id: 'storytelling-10',
+    title: 'Speak It Like Scenes',
+    content: {
+      explanation: 'Story equals scene one, scene two, scene three.',
+      example: '"Kitchen. Car. Store."',
+      practice: 'Tell a story in 3 scenes labeled "scene one, scene two, scene three."',
+    },
+  },
+  {
+    id: 'storytelling-11',
+    title: 'Use Short Lines for Impact',
+    content: {
+      explanation: 'Short lines make tension sharp.',
+      example: '"Then he said something. I froze."',
+      practice: 'Tell a 20 second story with 2 short impact lines.',
+    },
+  },
+  {
+    id: 'storytelling-12',
+    title: "Don't Explain the Moral",
+    content: {
+      explanation: 'You do not need to say "the lesson is..." The listener gets it.',
+      example: 'Just end on the final moment.',
+      practice: 'Tell a story and do not explain the lesson.',
+    },
+  },
+  {
+    id: 'storytelling-13',
+    title: 'Use Contrast Words',
+    content: {
+      explanation: 'Contrast creates clarity.',
+      example: '"First I thought X. Now I know Y."',
+      practice: 'Tell one story with a before/after contrast.',
+    },
+  },
+  {
+    id: 'storytelling-14',
+    title: 'End at the Moment',
+    content: {
+      explanation: 'Do not drag after the last beat.',
+      example: '"And that was that." Stop.',
+      practice: 'Tell a story and stop immediately after the final event.',
+    },
+  },
+  {
+    id: 'storytelling-15',
+    title: 'Practice One-Minute Stories',
+    content: {
+      explanation: 'One minute is the perfect length for normal life storytelling.',
+      example: 'One minute about "what happened at the store."',
+      practice: 'Record 60 seconds telling one simple event today.',
+    },
+  },
+];
 
-const CLARITY_STRUCTURE_CARDS = createCards('clarityStructure', [
-  'Start with a hook that promises value immediately.',
-  'State your thesis clearly before diving into details.',
-  'Group supporting points into three clear pillars.',
-  'Use signpost language such as "first," "next," and "finally."',
-  'Integrate statistics or stories strategically within each section.',
-  'Reinforce main ideas with mini-summaries after each pillar.',
-  'Craft transitions that connect ideas logically.',
-  'Build momentum by escalating stakes across the body.',
-  'Offer concrete examples to ground abstract concepts.',
-  'Recap key points before moving into the conclusion.',
-  'Close with a memorable call to action that is easy to follow.',
-  'End on a strong quote or story to anchor the message.',
-  'Ensure every visual supports the current section.',
-  'Time each segment to maintain a balanced structure.',
-  'Trim any repetition that weakens your conclusion.',
-]);
+const CLARITY_STRUCTURE_CARDS = [
+  {
+    id: 'clarityStructure-1',
+    title: 'Say the Point First',
+    content: {
+      explanation: 'People focus fast. Give them the conclusion first, then details after.',
+      example: '"The short version: I need a day off."',
+      practice: 'Say your main point first in 2 sentences today.',
+    },
+  },
+  {
+    id: 'clarityStructure-2',
+    title: 'One Sentence Equals One Idea',
+    content: {
+      explanation: 'If you put three ideas in one sentence, the listener will miss all three.',
+      example: '"I finished work. I ate. I slept."',
+      practice: 'Talk for 20 seconds using one idea per sentence only.',
+    },
+  },
+  {
+    id: 'clarityStructure-3',
+    title: 'End Every Sentence Clean',
+    content: {
+      explanation: 'Do not fade out. Do not drag. Land the final word clearly.',
+      example: 'Deliver: "That is what happened." (land the last word)',
+      practice: 'Speak for 20 seconds and land every ending.',
+    },
+  },
+  {
+    id: 'clarityStructure-4',
+    title: 'Remove Dead Intro Phrases',
+    content: {
+      explanation: 'Delete phrases like "to be honest," "honestly," "you know," and "basically."',
+      example: 'Change "basically I was tired" to "I was tired."',
+      practice: 'Tell 2 stories today without intro fluff.',
+    },
+  },
+  {
+    id: 'clarityStructure-5',
+    title: 'Use Short Sentences to Compress Thought',
+    content: {
+      explanation: 'Short sentences create tight logic.',
+      example: '"I am hungry. Let us eat."',
+      practice: 'Take one long story and retell it in 4 short sentences.',
+    },
+  },
+  {
+    id: 'clarityStructure-6',
+    title: 'Use Strong Nouns',
+    content: {
+      explanation: 'Specific nouns create images. Vague nouns create fog.',
+      example: 'Change "fruit" to "oranges." Change "vehicle" to "Honda Civic."',
+      practice: 'Say 3 sentences with specific nouns today.',
+    },
+  },
+  {
+    id: 'clarityStructure-7',
+    title: 'Use Strong Verbs',
+    content: {
+      explanation: 'Strong verbs carry action and clarity.',
+      example: 'Weak: "I might start." Strong: "I will start."',
+      practice: 'Rewrite one weak sentence into a strong one.',
+    },
+  },
+  {
+    id: 'clarityStructure-8',
+    title: 'Put the Most Important Word Near the End',
+    content: {
+      explanation: 'Endings have the highest memory weight.',
+      example: '"The main problem is speed."',
+      practice: 'Say one sentence about your day and put the most key word last.',
+    },
+  },
+  {
+    id: 'clarityStructure-9',
+    title: 'Delete Background Story That Does Not Matter',
+    content: {
+      explanation: 'Context is addictive, but most of it is useless.',
+      example: 'Not: "I woke up at 7, then I..." Just: "I want to talk about something funny."',
+      practice: 'Tell one story today starting only with the highlight.',
+    },
+  },
+  {
+    id: 'clarityStructure-10',
+    title: 'Edit While Speaking',
+    content: {
+      explanation: 'If you feel a sentence drifting, stop and finish early.',
+      example: '"Anyway, that is it."',
+      practice: 'Talk for 20 seconds and cut one sentence halfway.',
+    },
+  },
+  {
+    id: 'clarityStructure-11',
+    title: 'Speak in Chapters',
+    content: {
+      explanation: 'Break your message into mini-chunks like "chapter one, chapter two."',
+      example: '"First: the problem. Second: the plan."',
+      practice: 'Explain a topic today in 2 chapters.',
+    },
+  },
+  {
+    id: 'clarityStructure-12',
+    title: 'Anchor Words',
+    content: {
+      explanation: 'A short anchor phrase you repeat gives structure.',
+      example: 'Anchor: "the truth is:"',
+      practice: 'Choose one anchor phrase today and use it twice.',
+    },
+  },
+  {
+    id: 'clarityStructure-13',
+    title: 'Tight Transitions',
+    content: {
+      explanation: 'Transitions keep clarity stable: "next," "the result," "the reason."',
+      example: '"Next: I need to tell you the result."',
+      practice: 'Speak for 20 seconds and use 2 transition phrases.',
+    },
+  },
+  {
+    id: 'clarityStructure-14',
+    title: "Do Not Argue Inside the Sentence",
+    content: {
+      explanation: 'Do not negotiate while speaking. State your point, then explain.',
+      example: '"We should leave. We can discuss details."',
+      practice: 'Give 2 direct statements today, then explain after.',
+    },
+  },
+  {
+    id: 'clarityStructure-15',
+    title: 'Stop Re-Building the Sentence Mid-Way',
+    content: {
+      explanation: 'If you restart, you create noise. Finish the line even if imperfect.',
+      example: '"I was annoyed. That is enough detail."',
+      practice: 'Talk for 20 seconds with no restarting. Finish every sentence as-is.',
+    },
+  },
+];
 
-const EMOTIONAL_TONE_CARDS = createCards('emotionalTone', [
-  'Explore your low, middle, and high registers during warm-ups.',
-  'Emphasize key words by slightly increasing volume.',
-  'Play with pitch changes to signal questions or excitement.',
-  'Add vocal color by varying chest and head resonance.',
-  'Use intentional quiet moments to draw the audience closer.',
-  'Practice sustaining vowels to smooth out your delivery.',
-  'Use contrast between fast and slow phrases for impact.',
-  'Highlight numbers or data with a firm, grounded tone.',
-  'Layer emotion into your voice to match the story arc.',
-  'Avoid monotony by shifting energy every 60 seconds.',
-  'Record and review to catch patterns in your intonation.',
-  'Project without shouting in rooms of different sizes.',
-  'Support long speaking sessions with regular vocal breaks.',
-  'Experiment with expressive phrasing borrowed from poetry.',
-  'Mark your script with cues for volume, pitch, and pace.',
-]);
+const EMOTIONAL_TONE_CARDS = [
+  {
+    id: 'emotionalTone-1',
+    title: 'Name the Emotion First',
+    content: {
+      explanation: 'Emotion gets messy when you hide it. Name it cleanly and briefly.',
+      example: '"I am annoyed." Then talk.',
+      practice: 'Today say one feeling in one word before you explain it.',
+    },
+  },
+  {
+    id: 'emotionalTone-2',
+    title: "Don't Dramatize",
+    content: {
+      explanation: 'Emotional power equals calm plus clear. Drama equals childish.',
+      example: 'Not: "I was SO mad." Say: "I was angry."',
+      practice: 'Say 3 emotional sentences today without exaggeration.',
+    },
+  },
+  {
+    id: 'emotionalTone-3',
+    title: 'Tone Drop Equals Seriousness',
+    content: {
+      explanation: 'Lower tone signals a heavier message.',
+      example: 'Drop tone slightly for "this is important."',
+      practice: 'Say one strong line with a tone drop at the end.',
+    },
+  },
+  {
+    id: 'emotionalTone-4',
+    title: 'Slow Equals Emotionally Mature',
+    content: {
+      explanation: 'Fast emotion sounds reactive. Slow emotion sounds stable.',
+      example: '"I did not like that." Slow and steady.',
+      practice: 'Say 2 emotional statements slowly.',
+    },
+  },
+  {
+    id: 'emotionalTone-5',
+    title: 'Speak After Breath',
+    content: {
+      explanation: 'Emotion disrupts breath. Fix breath first.',
+      example: 'Inhale through your nose. Then speak.',
+      practice: 'Say one sentence about something upsetting after inhaling.',
+    },
+  },
+  {
+    id: 'emotionalTone-6',
+    title: "Don't Argue Inside the Line",
+    content: {
+      explanation: 'Finish the sentence. Do not negotiate while speaking.',
+      example: '"I did not like that." Period.',
+      practice: 'Say one emotional sentence today without rephrasing it.',
+    },
+  },
+  {
+    id: 'emotionalTone-7',
+    title: 'One Example Only',
+    content: {
+      explanation: 'Emotional clarity comes from one example, not ten.',
+      example: '"I got ignored." Not "there were many times..."',
+      practice: 'Describe one emotional event today with one example.',
+    },
+  },
+  {
+    id: 'emotionalTone-8',
+    title: 'Pause Before Punchline',
+    content: {
+      explanation: 'Silence makes emotion hit harder.',
+      example: '"You know what bothered me?" [pause] "He walked away."',
+      practice: 'Use a 1 second pause before the emotional point.',
+    },
+  },
+  {
+    id: 'emotionalTone-9',
+    title: 'No Emotional Filler Words',
+    content: {
+      explanation: 'Words like "kinda" and "sorta" weaken emotion.',
+      example: '"I felt disrespected."',
+      practice: 'Express one emotion today without fillers.',
+    },
+  },
+  {
+    id: 'emotionalTone-10',
+    title: 'Short Emotional Sentences',
+    content: {
+      explanation: 'Keep emotion lines short so they land.',
+      example: '"That hurt."',
+      practice: 'Express one feeling in 4 words or less.',
+    },
+  },
+  {
+    id: 'emotionalTone-11',
+    title: 'Speak from Chest',
+    content: {
+      explanation: 'Emotions in chest voice register sound grounded.',
+      example: 'Say "I care about this." in chest voice.',
+      practice: 'Talk for 15 seconds in chest voice about something that mattered today.',
+    },
+  },
+  {
+    id: 'emotionalTone-12',
+    title: 'Avoid Question-Tone Endings',
+    content: {
+      explanation: 'Do not rise pitch at the end. It makes emotion look doubtful.',
+      example: '"This upset me." (downward tone)',
+      practice: 'Say 2 emotional lines with downward endings.',
+    },
+  },
+  {
+    id: 'emotionalTone-13',
+    title: 'Describe Physical Signal, Not Drama',
+    content: {
+      explanation: 'Physical description sounds believable.',
+      example: '"My heart sped up."',
+      practice: 'Describe a body reaction instead of complaining.',
+    },
+  },
+  {
+    id: 'emotionalTone-14',
+    title: 'Highlight Contrast',
+    content: {
+      explanation: 'Emotion is contrast between expectation and reality.',
+      example: '"I expected X. I got Y."',
+      practice: 'State one expectation versus one reality today.',
+    },
+  },
+  {
+    id: 'emotionalTone-15',
+    title: 'End Emotional Message Clean',
+    content: {
+      explanation: 'Do not drag after the point. End sharp.',
+      example: '"That is how I felt." Stop.',
+      practice: 'Say one emotional sentence then stop.',
+    },
+  },
+];
 
-const PERSUASION_CARDS = createCards('persuasion', [
-  'Set expectations for when questions and objections will be addressed.',
-  'Listen fully to an objection before offering a response.',
-  'Paraphrase the concern to prove you understood it accurately.',
-  'Pause briefly to compose a clear, logical reply.',
-  'Thank the person for raising the point to keep rapport.',
-  'Bridge every answer back to your core message or promise.',
-  'Admit gaps honestly and commit to follow up when needed.',
-  'Redirect off-topic objections toward the key decision criteria.',
-  'Break multi-part challenges into one issue at a time.',
-  'Invite supporting questions that build consensus.',
-  'Watch the clock so objection handling stays within scope.',
-  'Maintain open body language while delivering rebuttals.',
-  'Summarize common objections and how you resolved them.',
-  'Offer clear next steps after handling a tough objection.',
-  'Transition smoothly back into your planned narrative.',
-]);
+const PERSUASION_CARDS = [
+  {
+    id: 'persuasion-1',
+    title: 'State Your Position First',
+    content: {
+      explanation: 'Persuasion fails when you "lead up to it." Say your position upfront.',
+      example: '"I want to leave at 7."',
+      practice: 'Say one request today in the first sentence.',
+    },
+  },
+  {
+    id: 'persuasion-2',
+    title: "Don't Defend Before They Attack",
+    content: {
+      explanation: 'Insecure people pre-defend their position.',
+      example: 'Weak: "I do not want you to think I am selfish but..." Strong: "I need space tonight."',
+      practice: 'State a preference with zero defense clause.',
+    },
+  },
+  {
+    id: 'persuasion-3',
+    title: 'Single Reason Beats Five Reasons',
+    content: {
+      explanation: 'Many reasons look weak. One strong reason looks solid.',
+      example: '"Let us take my car. It is closer."',
+      practice: 'Convince someone today with one clear reason only.',
+    },
+  },
+  {
+    id: 'persuasion-4',
+    title: 'Call Out the Objection Yourself',
+    content: {
+      explanation: 'Say the objection before they say it.',
+      example: '"You might think I am overreacting. I am not."',
+      practice: 'Name one expected objection in your next request.',
+    },
+  },
+  {
+    id: 'persuasion-5',
+    title: 'Never Ask "Does That Make Sense?"',
+    content: {
+      explanation: 'That question signals low authority.',
+      example: 'Replace with: "Here is the logic."',
+      practice: 'Talk for 20 seconds. Never ask for clarity approval.',
+    },
+  },
+  {
+    id: 'persuasion-6',
+    title: 'Talk Slower on the Key Line',
+    content: {
+      explanation: 'Emphasis is created by pacing shift, not yelling.',
+      example: '"This part matters."',
+      practice: 'Slow down one sentence about your point.',
+    },
+  },
+  {
+    id: 'persuasion-7',
+    title: 'Remove Softeners',
+    content: {
+      explanation: 'Softeners include "kind of," "maybe," and "possibly."',
+      example: '"We should go now."',
+      practice: 'State one desired outcome with no softeners.',
+    },
+  },
+  {
+    id: 'persuasion-8',
+    title: 'Define the Frame',
+    content: {
+      explanation: 'The person who decides the frame controls the conversation.',
+      example: '"The real question is timing."',
+      practice: 'Label the frame once today.',
+    },
+  },
+  {
+    id: 'persuasion-9',
+    title: 'Turn Questions into Statements',
+    content: {
+      explanation: '"Should we go?" sounds weak. "We should go." shows leadership.',
+      example: 'Turn "should we go?" into "we should go."',
+      practice: 'Convert one question today into a statement.',
+    },
+  },
+  {
+    id: 'persuasion-10',
+    title: 'Isolate the Disagreement',
+    content: {
+      explanation: 'Find one exact disagreement. Not everything.',
+      example: '"We agree on leaving. We disagree on when."',
+      practice: 'Identify exactly one disagreement.',
+    },
+  },
+  {
+    id: 'persuasion-11',
+    title: 'Remove Emotion Language When Persuading',
+    content: {
+      explanation: 'Persuasion equals clarity, not emotional leakage.',
+      example: '"This is more efficient" not "this feels better."',
+      practice: 'Argue one point with zero emotion words.',
+    },
+  },
+  {
+    id: 'persuasion-12',
+    title: 'Show Practical Benefit, Not Moral Superiority',
+    content: {
+      explanation: 'People change when it helps them, not when they are shamed.',
+      example: '"We save 10 minutes" not "you should care more."',
+      practice: 'Show one benefit today in numbers or time.',
+    },
+  },
+  {
+    id: 'persuasion-13',
+    title: "Don't Repeat Your Argument",
+    content: {
+      explanation: 'Repeating signals low status.',
+      example: '"I already said my point."',
+      practice: 'State your point once. If they do not accept, do not restate.',
+    },
+  },
+  {
+    id: 'persuasion-14',
+    title: 'Call the Decision',
+    content: {
+      explanation: 'Persuasion ends with a decision request.',
+      example: '"So... yes or no?"',
+      practice: 'Ask one clear decision question today.',
+    },
+  },
+  {
+    id: 'persuasion-15',
+    title: 'Stop After the Punchline',
+    content: {
+      explanation: 'Over-explaining kills influence.',
+      example: '"That is why this is the better option." Stop talking.',
+      practice: 'State your final line then hold 2 seconds of silence.',
+    },
+  },
+];
 
-const IDEA_FRAMING_CARDS = createCards('ideaFraming', [
-  "Research your audience to frame ideas around what they value most.",
-  'Lead with a context sentence that anchors listeners in time or place.',
-  'Sequence ideas from big picture to specific proof.',
-  'Use contrast, such as before-versus-after, to spotlight core insights.',
-  'Connect each supporting story back to the main thesis.',
-  'Employ signposts like "first," "next," and "finally" to guide hierarchy.',
-  'Use rhetorical questions to open new sections of the narrative.',
-  'Highlight why each point matters before diving into detail.',
-  'Blend data and anecdotes to balance logic and emotion.',
-  'Revisit the central problem each time you introduce a sub-point.',
-  'Use callbacks to weave earlier moments into later sections.',
-  'Transition with summary sentences that close each beat.',
-  'Recap the hierarchy before shifting into implementation steps.',
-  'End sections with a takeaway phrase the audience can quote.',
-  'Preview how the next idea builds on the structure you just established.',
-]);
+const IDEA_FRAMING_CARDS = [
+  {
+    id: 'ideaFraming-1',
+    title: 'Start with the Headline',
+    content: {
+      explanation: 'Headline first tells the listener what container this belongs to.',
+      example: '"Main point: I need more quiet at night."',
+      practice: 'Deliver one headline before you explain anything.',
+    },
+  },
+  {
+    id: 'ideaFraming-2',
+    title: 'One Purpose Per Conversation',
+    content: {
+      explanation: 'If you mix missions, you dilute leverage.',
+      example: 'Not: ask a favor plus complain plus update. Choose one purpose.',
+      practice: 'Pick one purpose before you speak.',
+    },
+  },
+  {
+    id: 'ideaFraming-3',
+    title: 'Label the Topic Explicitly',
+    content: {
+      explanation: 'Humans need topic labels to file information.',
+      example: '"Topic: tomorrow schedule."',
+      practice: 'Label one topic out loud before describing it.',
+    },
+  },
+  {
+    id: 'ideaFraming-4',
+    title: 'State Outcome Before Details',
+    content: {
+      explanation: 'Outcome clarifies direction. Details only matter after.',
+      example: '"Goal: we leave at 7."',
+      practice: 'State the desired outcome first today.',
+    },
+  },
+  {
+    id: 'ideaFraming-5',
+    title: 'Create a Mental Folder',
+    content: {
+      explanation: 'Folders reduce mental load.',
+      example: '"This is about food, not work."',
+      practice: 'Use one folder label in your next talk.',
+    },
+  },
+  {
+    id: 'ideaFraming-6',
+    title: 'Reduce Your Thought Scope',
+    content: {
+      explanation: 'If your mental scope is huge, speech becomes blurry.',
+      example: '"I am only talking about dinner location."',
+      practice: 'Shrink topic to one subtopic before speaking.',
+    },
+  },
+  {
+    id: 'ideaFraming-7',
+    title: "Don't Explain What They Already Know",
+    content: {
+      explanation: 'Repeating known information insults the listener.',
+      example: 'Do not define basic context they already know.',
+      practice: 'Remove known context once today.',
+    },
+  },
+  {
+    id: 'ideaFraming-8',
+    title: 'Define the Problem Before Telling Story',
+    content: {
+      explanation: 'Listeners need the reason the story matters.',
+      example: '"The issue is planning. Now story:"',
+      practice: 'Say the problem sentence first.',
+    },
+  },
+  {
+    id: 'ideaFraming-9',
+    title: 'Separate Fact from Interpretation',
+    content: {
+      explanation: 'Mixing both creates confusion.',
+      example: 'Fact: "He arrived late." Interpretation: "He did not care."',
+      practice: 'Say one fact sentence then one interpretation sentence.',
+    },
+  },
+  {
+    id: 'ideaFraming-10',
+    title: 'Isolate Your Key Idea',
+    content: {
+      explanation: 'People remember one idea, not seven.',
+      example: '"The key is consistency."',
+      practice: 'Say one idea and call it the idea.',
+    },
+  },
+  {
+    id: 'ideaFraming-11',
+    title: 'Compress Your Intro',
+    content: {
+      explanation: 'Intros should be 3 to 7 seconds maximum.',
+      example: '"Quick update."',
+      practice: 'Make your next intro under 7 seconds.',
+    },
+  },
+  {
+    id: 'ideaFraming-12',
+    title: "Don't Chase Side Paths",
+    content: {
+      explanation: 'Tangents kill clarity.',
+      example: 'If your brain wants to go sideways, stop it.',
+      practice: 'Drop one tangent intentionally today.',
+    },
+  },
+  {
+    id: 'ideaFraming-13',
+    title: 'Put Numbers on Your Ideas',
+    content: {
+      explanation: 'Numbers create structure.',
+      example: '"I have 2 points."',
+      practice: 'Speak one idea list using numbers.',
+    },
+  },
+  {
+    id: 'ideaFraming-14',
+    title: 'Decide the Destination Sentence Before Speaking',
+    content: {
+      explanation: 'Knowing your end line locks structure.',
+      example: 'Destination: "we should choose restaurant X."',
+      practice: 'Think your destination sentence first today.',
+    },
+  },
+  {
+    id: 'ideaFraming-15',
+    title: 'Stop After the Conclusion',
+    content: {
+      explanation: 'After your conclusion, use silence. No extra sentence.',
+      example: '"So the solution is X." Stop.',
+      practice: 'Deliver a conclusion and stop instantly.',
+    },
+  },
+];
 
-const OPENING_MASTERY_CARDS = createCards('openingMastery', [
-  'Draft three hook options—story, question, statistic—for every talk.',
-  'Practice a cold open that starts mid-action without greeting.',
-  'Use a sensory detail in the first line to drop listeners into the moment.',
-  'Pose a high-stakes question within the first 10 seconds.',
-  'State the audience payoff before sharing your background.',
-  'Use a surprising data point to reset expectations instantly.',
-  'Build a micro-story that ends with the problem you will solve.',
-  'Test a contrasting statement: "You think X, but actually Y."',
-  'Memorize the first 30 seconds so you can maintain eye contact.',
-  'Pair your opening line with a deliberate pause for emphasis.',
-  'Layer a callback in the opening that you can close later.',
-  'Use props or visuals only if they strengthen the first impression.',
-  'Practice delivering the opening at three different energy levels.',
-  'Rehearse how you will transition from the hook into the agenda.',
-  'Record your opening and rate whether it sparks curiosity immediately.',
-]);
+const OPENING_MASTERY_CARDS = [
+  {
+    id: 'openingMastery-1',
+    title: 'Start with the End Result',
+    content: {
+      explanation: 'Instead of warming up, start with the conclusion.',
+      example: '"Bottom line: I want to leave early tonight."',
+      practice: 'Today open one conversation with the result first.',
+    },
+  },
+  {
+    id: 'openingMastery-2',
+    title: 'Cold Open',
+    content: {
+      explanation: 'Jump straight into the moment. No greeting. No "how was your day."',
+      example: '"Listen. Something weird happened today."',
+      practice: 'Use one cold open today.',
+    },
+  },
+  {
+    id: 'openingMastery-3',
+    title: 'Question Open',
+    content: {
+      explanation: 'A short question wakes attention instantly.',
+      example: '"Want to know something surprising?"',
+      practice: 'Start one conversation today with a question.',
+    },
+  },
+  {
+    id: 'openingMastery-4',
+    title: 'Contrast Open',
+    content: {
+      explanation: 'Contrast creates tension, which leads to immediate attention.',
+      example: '"I expected a calm day. I got chaos instead."',
+      practice: 'Open a story today with contrast.',
+    },
+  },
+  {
+    id: 'openingMastery-5',
+    title: 'Snapshot-Image Open',
+    content: {
+      explanation: 'Paint one quick visual moment.',
+      example: '"Picture this: full grocery line. Just one cashier."',
+      practice: 'Start one story with a tiny picture.',
+    },
+  },
+  {
+    id: 'openingMastery-6',
+    title: 'One-Word Open',
+    content: {
+      explanation: 'One word as opener shocks the brain into focus.',
+      example: '"Enough." Pause. Then story.',
+      practice: 'Open one statement today with one strong word.',
+    },
+  },
+  {
+    id: 'openingMastery-7',
+    title: 'Confession Open',
+    content: {
+      explanation: 'Tiny vulnerability leads to attention lock.',
+      example: '"I messed up today."',
+      practice: 'Open one story with a confession.',
+    },
+  },
+  {
+    id: 'openingMastery-8',
+    title: 'Rule Break Open',
+    content: {
+      explanation: 'Break an expectation in the first second.',
+      example: '"I know you will not expect this."',
+      practice: 'Start one talk today with a pattern break reference.',
+    },
+  },
+  {
+    id: 'openingMastery-9',
+    title: 'Curiosity Gap Open',
+    content: {
+      explanation: 'Hint at meaning but do not reveal yet.',
+      example: '"I learned something today that changed one thing for me."',
+      practice: 'Open a story today with curiosity.',
+    },
+  },
+  {
+    id: 'openingMastery-10',
+    title: 'Time Stamp Open',
+    content: {
+      explanation: 'Grounding the moment creates instant realism.',
+      example: '"3pm today, this happened."',
+      practice: 'Open one story today with a time stamp.',
+    },
+  },
+  {
+    id: 'openingMastery-11',
+    title: 'Location Stamp Open',
+    content: {
+      explanation: 'Location anchors imagination faster than adjectives.',
+      example: '"At the coffee shop, right at the door, this happened."',
+      practice: 'Open one story today with location first.',
+    },
+  },
+  {
+    id: 'openingMastery-12',
+    title: 'Person Stamp Open',
+    content: {
+      explanation: 'Leading with a human triggers instant empathy.',
+      example: '"My neighbor said something odd today."',
+      practice: 'Open one story with a person name first.',
+    },
+  },
+  {
+    id: 'openingMastery-13',
+    title: 'Silence Then Line',
+    content: {
+      explanation: 'Pause, then speak one clean sentence.',
+      example: '[Pause 1 second] "I did not expect what happened today."',
+      practice: 'Use a 1-second silence before your opening sentence once today.',
+    },
+  },
+  {
+    id: 'openingMastery-14',
+    title: 'Start Small',
+    content: {
+      explanation: 'Tiny detail leads into big idea.',
+      example: '"I dropped my keys. That moment taught me something."',
+      practice: 'Open one talk with one tiny detail.',
+    },
+  },
+  {
+    id: 'openingMastery-15',
+    title: 'Snap Open',
+    content: {
+      explanation: 'Snap equals short opener plus direct point. Strong impact.',
+      example: '"Quick update."',
+      practice: 'Start one update today with a snap opener.',
+    },
+  },
+];
 
-const CLOSING_MASTERY_CARDS = createCards('closingMastery', [
-  'Summarize the core message in one sentence before closing.',
-  'Loop back to your opening hook to create narrative symmetry.',
-  'Deliver a concise list of next steps or commitments.',
-  'Share a success image that shows life after adopting your idea.',
-  'Craft a memorable final line and rehearse landing it cleanly.',
-  'Issue a clear call to action with a deadline or trigger.',
-  'Highlight the cost of inaction to reinforce urgency.',
-  'Use gratitude language that acknowledges audience effort.',
-  'Invite reflection with a final question they can ponder later.',
-  'Provide a simple way to stay in touch or continue learning.',
-  'Practice ending without trailing filler or apologies.',
-  'Pause after the final line to let the message settle.',
-  'Coordinate body language so your stance matches the conclusion.',
-  'Prepare a bonus close for situations where time gets cut short.',
-  'Capture feedback on your closing to iterate the next version.',
-]);
+const CLOSING_MASTERY_CARDS = [
+  {
+    id: 'closingMastery-1',
+    title: 'Say the Conclusion Clearly',
+    content: {
+      explanation: 'Do not "fade out." The conclusion must sound like a conclusion.',
+      example: '"So the solution is to leave earlier."',
+      practice: 'End one conversation today by stating your exact conclusion in one sentence.',
+    },
+  },
+  {
+    id: 'closingMastery-2',
+    title: 'Callback to the Opening',
+    content: {
+      explanation: 'A callback "closes the loop."',
+      example: 'If you opened with "we need calm," close with "and this is how we get calm."',
+      practice: 'Today pick one opener and reference it again at the end.',
+    },
+  },
+  {
+    id: 'closingMastery-3',
+    title: 'End with a Beat of Silence',
+    content: {
+      explanation: 'Silence after a conclusion makes the ending heavier.',
+      example: '"That is what matters." [pause]',
+      practice: 'After your next conclusion, pause for 2 seconds.',
+    },
+  },
+  {
+    id: 'closingMastery-4',
+    title: "Don't Keep Adding New Ideas at the End",
+    content: {
+      explanation: 'The ending is not the place to bring new content.',
+      example: 'Finalize, then stop talking.',
+      practice: 'When you close, say nothing extra after.',
+    },
+  },
+  {
+    id: 'closingMastery-5',
+    title: 'Put the Key Word Last',
+    content: {
+      explanation: 'Last words have the highest memory weight.',
+      example: '"The hardest part was waking up EARLY."',
+      practice: 'End 2 sentences today with the strongest word last.',
+    },
+  },
+  {
+    id: 'closingMastery-6',
+    title: 'Define the Meaning in 1 Line',
+    content: {
+      explanation: 'What is the takeaway? One line only.',
+      example: '"This showed me patience is the driver."',
+      practice: 'Summarize one story in one single sentence.',
+    },
+  },
+  {
+    id: 'closingMastery-7',
+    title: 'Short Closer Equals Stronger Closer',
+    content: {
+      explanation: 'Long closings feel insecure.',
+      example: '"So that is it."',
+      practice: 'Close one story with 5 words or less.',
+    },
+  },
+  {
+    id: 'closingMastery-8',
+    title: 'Emotional Label Ending',
+    content: {
+      explanation: 'If emotion drove the story, name the emotion at the end.',
+      example: '"And that made me frustrated."',
+      practice: 'Close one story today with a single emotion word.',
+    },
+  },
+  {
+    id: 'closingMastery-9',
+    title: 'Ask for a Decision',
+    content: {
+      explanation: 'Some closings need a choice.',
+      example: '"So yes or no?"',
+      practice: 'Close one conversation today with a decision request.',
+    },
+  },
+  {
+    id: 'closingMastery-10',
+    title: 'Recap in 2 Beats',
+    content: {
+      explanation: 'Recap equals 2 sentences maximum.',
+      example: '"He said X. I realized Y."',
+      practice: 'Close with a 2-beat recap.',
+    },
+  },
+  {
+    id: 'closingMastery-11',
+    title: 'Give the Future Move',
+    content: {
+      explanation: 'Some closings need a next action.',
+      example: '"So tomorrow I will call."',
+      practice: 'End one talk with your next move.',
+    },
+  },
+  {
+    id: 'closingMastery-12',
+    title: 'Remove Apology Endings',
+    content: {
+      explanation: 'Never end with "sorry if that makes sense" type lines.',
+      example: 'Strong: "That is my view."',
+      practice: 'End 2 conversations today with zero apology phrases.',
+    },
+  },
+  {
+    id: 'closingMastery-13',
+    title: 'End on the Strong Line, Not the Greeting',
+    content: {
+      explanation: 'Do not destroy impact with a soft "anyway yeah ok."',
+      example: 'Say conclusion then stop. Not: conclusion then "so yeah anyway."',
+      practice: 'Today end one message at the conclusion sentence only.',
+    },
+  },
+  {
+    id: 'closingMastery-14',
+    title: 'Repeat the Core Idea Once',
+    content: {
+      explanation: 'Restate only the core, not the whole thing.',
+      example: '"So the core point is discipline."',
+      practice: 'Pick one idea and repeat it once at the end.',
+    },
+  },
+  {
+    id: 'closingMastery-15',
+    title: 'One Closer Phrase',
+    content: {
+      explanation: 'Use a signature closer phrase so your endings feel "designed."',
+      example: '"So that is the final note."',
+      practice: 'Choose your own closer phrase today and use it once.',
+    },
+  },
+];
 
-const IDENTITY_PROJECTION_CARDS = createCards('identityProjection', [
-  'Film yourself to see if your posture matches the persona you want to project.',
-  'Plant your feet hip-width apart to signal grounded confidence.',
-  'Keep your knees relaxed so your stance feels open, not rigid.',
-  'Use intentional, open-handed gestures that reinforce your message.',
-  'Align gestures with key words to express consistent character.',
-  'Move purposefully between zones to show control of the space.',
-  'Hold eye contact for full sentences to convey presence.',
-  'Let your natural smile appear when the tone should feel warm.',
-  'Eliminate fidgeting habits that distract from your professional identity.',
-  'Pause to reset your stance whenever energy drifts.',
-  "Mirror the audience's energy level without losing your authenticity.",
-  'Expand physical presence through posture, not tension.',
-  'Match facial expressions to the story arc you are telling.',
-  'Use micro-pauses to acknowledge audience reactions with poise.',
-  'Close with a deliberate stance that embodies your chosen persona.',
-]);
+const IDENTITY_PROJECTION_CARDS = [
+  {
+    id: 'identityProjection-1',
+    title: 'Choose Who You Are Before You Speak',
+    content: {
+      explanation: 'Identity decides tone, not words.',
+      example: 'Choose "calm adult" and your voice becomes steady.',
+      practice: 'Pick one identity label before you talk today (example: calm).',
+    },
+  },
+  {
+    id: 'identityProjection-2',
+    title: "Don't Perform, Present",
+    content: {
+      explanation: 'Performance equals trying to impress. Presentation equals showing reality.',
+      example: '"Here is what happened" not "you will not believe this!!"',
+      practice: 'State 2 sentences flat, not dramatic.',
+    },
+  },
+  {
+    id: 'identityProjection-3',
+    title: 'Be the Person Who Decides Pace',
+    content: {
+      explanation: 'The one who controls rhythm is the leader.',
+      example: 'Slow opening sentence equals authority.',
+      practice: 'Open your next conversation with a slow first sentence.',
+    },
+  },
+  {
+    id: 'identityProjection-4',
+    title: 'Kill Approval Tone',
+    content: {
+      explanation: 'Rising pitch signals "please approve me."',
+      example: 'Downward endings sound certain.',
+      practice: 'End 3 sentences today with down-tone.',
+    },
+  },
+  {
+    id: 'identityProjection-5',
+    title: 'Speak Like Your Time Matters',
+    content: {
+      explanation: 'Short clean sentences signal the value of time.',
+      example: '"Here is the update."',
+      practice: 'Summarize one topic in 2 sentences maximum.',
+    },
+  },
+  {
+    id: 'identityProjection-6',
+    title: 'Set Boundaries Clean',
+    content: {
+      explanation: 'Identity becomes solid when you can say "no" calmly.',
+      example: '"No, not tonight."',
+      practice: 'Say one boundary sentence today.',
+    },
+  },
+  {
+    id: 'identityProjection-7',
+    title: 'Describe Reality, Not Fantasy',
+    content: {
+      explanation: 'Grounded speakers speak from observable facts first.',
+      example: '"He arrived late." Then meaning.',
+      practice: 'Say 2 fact sentences before any interpretation.',
+    },
+  },
+  {
+    id: 'identityProjection-8',
+    title: "Don't Rush Reason",
+    content: {
+      explanation: 'Leaders never defend immediately.',
+      example: 'Conclusion, pause, then reason.',
+      practice: 'State conclusion first then pause 1 second.',
+    },
+  },
+  {
+    id: 'identityProjection-9',
+    title: 'Consistency Equals Identity',
+    content: {
+      explanation: 'Repeated tone creates reputation faster than vocabulary.',
+      example: 'Always land endings.',
+      practice: 'Today consciously maintain one vocal behavior all day.',
+    },
+  },
+  {
+    id: 'identityProjection-10',
+    title: 'Talk Like You Are Not Scared of Silence',
+    content: {
+      explanation: 'Confidence equals calm space, not constant sound.',
+      example: '"That bothered me." [pause]',
+      practice: 'Add a pause before you say your emotional line.',
+    },
+  },
+  {
+    id: 'identityProjection-11',
+    title: 'Name Values in Simple Language',
+    content: {
+      explanation: 'Values equal who you are. Keep language plain.',
+      example: '"Honesty matters to me."',
+      practice: 'Say one value in one sentence today.',
+    },
+  },
+  {
+    id: 'identityProjection-12',
+    title: 'Remove Cuteness',
+    content: {
+      explanation: 'Playful tone destroys authority when misused.',
+      example: '"I need focus today." Not "hehe it is weird but..."',
+      practice: 'Express one need with zero cuteness layer.',
+    },
+  },
+  {
+    id: 'identityProjection-13',
+    title: 'Show Direction',
+    content: {
+      explanation: 'Leaders point to the future, not only the past.',
+      example: '"So next week I will adjust this."',
+      practice: 'End one talk with a next-step line.',
+    },
+  },
+  {
+    id: 'identityProjection-14',
+    title: "Don't Chase Validation Faces",
+    content: {
+      explanation: 'Scanning people faces for approval weakens identity.',
+      example: 'Maintain forward focus mid-sentence.',
+      practice: 'Finish one sentence today without checking reaction.',
+    },
+  },
+  {
+    id: 'identityProjection-15',
+    title: 'Speak "Like You Mean It"',
+    content: {
+      explanation: 'Tone should match meaning. Calm, clean, final.',
+      example: '"That is my position."',
+      practice: 'Say one final line today like a decision, not a suggestion.',
+    },
+  },
+];
 
 const MODULES = [
   {

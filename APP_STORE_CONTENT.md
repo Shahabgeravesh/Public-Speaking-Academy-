@@ -240,3 +240,108 @@ This combination positions your app as both a learning tool and a professional d
 - Better discoverability across both categories
 - Appeals to students (Education) and professionals (Productivity)
 
+---
+
+## App Store Screenshots Strategy
+
+### Screenshot Order (Most Important First)
+
+**Yes, screenshot order matters!** The first 1-2 screenshots are shown in search results and are critical for conversion. Order them to tell a compelling story.
+
+### Recommended Screenshot Order:
+
+#### Option 1: Feature-Focused (Recommended)
+1. **Home Screen** - Shows all 12 modules, overall progress, clean interface
+   - **Why first:** Immediate value proposition, shows comprehensive content
+   - **Text overlay:** "12 Comprehensive Modules" or "Master Public Speaking"
+
+2. **Module Screen** - Shows a card from any module with content
+   - **Why second:** Demonstrates the learning experience, shows quality content
+   - **Text overlay:** "180+ Practice Cards" or "Learn at Your Own Pace"
+
+3. **Progress Tracking** - Shows progress indicators, completion status
+   - **Why third:** Highlights gamification and progress tracking features
+   - **Text overlay:** "Track Your Progress" or "Visual Progress Indicators"
+
+4. **Journal Feature** - Shows journal entry screen
+   - **Why fourth:** Unique feature, personalization aspect
+   - **Text overlay:** "Personal Journal" or "Capture Your Insights"
+
+5. **Module Completion** - Shows celebration banner or completed module
+   - **Why fifth:** Shows achievement and motivation
+   - **Text overlay:** "Achievement Unlocked" or "Complete Modules"
+
+#### Option 2: Tutorial-Focused (If Using Tutorial Screens)
+1. **Tutorial Screen 1** - "Master Public Speaking" (Introduction)
+   - **Why first:** Immediate value proposition, professional look
+   - **Text overlay:** "Master Public Speaking"
+
+2. **Tutorial Screen 2** - "Learn at Your Pace" (15 cards)
+   - **Why second:** Shows learning method, card-based system
+   - **Text overlay:** "180+ Practice Cards"
+
+3. **Tutorial Screen 3** - "Track Your Progress" (Progress tracking)
+   - **Why third:** Highlights progress tracking feature
+   - **Text overlay:** "Track Your Progress"
+
+4. **Home Screen** - Actual app interface
+   - **Why fourth:** Shows real app, not just tutorial
+   - **Text overlay:** "12 Comprehensive Modules"
+
+5. **Module Screen** - Learning experience
+   - **Why fifth:** Shows actual learning content
+   - **Text overlay:** "Learn at Your Own Pace"
+
+### Best Practices:
+
+✅ **DO:**
+- Start with your strongest value proposition
+- Use tutorial screens for polished marketing visuals
+- Include actual app screens to show real interface
+- Add text overlays highlighting key features
+- Maintain consistent visual style across screenshots
+- Show progress and achievements
+- Demonstrate the learning journey
+
+❌ **DON'T:**
+- Use random order
+- Skip the home screen (users want to see the app)
+- Use only tutorial screens (mix with real app)
+- Overload with text overlays
+- Use inconsistent designs
+- Hide key features
+
+### Screenshot Requirements:
+
+- **Minimum:** 1 screenshot (but use 3-5 for best results)
+- **Maximum:** 10 screenshots per device size
+- **Required sizes:**
+  - iPhone 6.7" (iPhone 14 Pro Max, etc.) - 1290 x 2796 pixels
+  - iPhone 6.5" (iPhone 11 Pro Max, etc.) - 1242 x 2688 pixels
+  - iPhone 5.5" (iPhone 8 Plus, etc.) - 1242 x 2208 pixels
+  - iPad Pro 12.9" - 2048 x 2732 pixels
+  - iPad Pro 11" - 1668 x 2388 pixels
+
+### Recommended Screenshot Count:
+- **iPhone:** 5 screenshots (optimal)
+- **iPad:** 5 screenshots (if supporting iPad)
+
+### Screenshot Text Overlays (Optional but Recommended):
+
+1. "12 Comprehensive Modules"
+2. "180+ Practice Cards"
+3. "Track Your Progress"
+4. "Personal Journal"
+5. "Master Public Speaking"
+
+### Final Recommendation:
+
+**Use a mix of tutorial and actual app screens:**
+1. Tutorial Screen 1 (Master Public Speaking) - Polished intro
+2. Home Screen - Real app interface
+3. Module Screen - Learning experience
+4. Progress Tracking - Gamification
+5. Journal Feature - Unique value
+
+This combination shows both the polished marketing visuals (tutorial) and the actual app experience (real screens), maximizing conversion potential.
+

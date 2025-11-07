@@ -2170,7 +2170,12 @@ export default function App() {
               <Text style={styles.heading}>Public Speaking Academy</Text>
               <Text style={styles.subheading}>Master every skill, one card at a time.</Text>
             </View>
-            <TouchableOpacity onPress={handleOpenJournal} style={styles.journalButton}>
+            <TouchableOpacity 
+              onPress={handleOpenJournal} 
+              style={styles.journalButton}
+              accessibilityRole="button"
+              accessibilityLabel="Open Journal"
+            >
               <Text style={styles.journalButtonText}>Journal</Text>
             </TouchableOpacity>
           </View>
@@ -2212,6 +2217,9 @@ export default function App() {
                 disabled={!unlocked}
                 onPress={() => handleOpenModule(module.id)}
                 style={styles.moduleCardWrapper}
+                accessibilityRole="button"
+                accessibilityLabel={`${module.title}. ${moduleProgress.completedCount} of ${moduleProgress.total} cards completed. ${unlocked ? 'Tap to open' : 'Locked. Complete previous module to unlock'}`}
+                accessibilityState={{ disabled: !unlocked }}
               >
                 <LinearGradient
                   colors={module.gradient}
@@ -2280,7 +2288,12 @@ export default function App() {
             showsVerticalScrollIndicator={false}
           >
             <View style={styles.moduleHeader}>
-              <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
+              <TouchableOpacity 
+                onPress={handleBackHome} 
+                style={styles.backButton}
+                accessibilityRole="button"
+                accessibilityLabel="Go back to home"
+              >
                 <Text style={styles.backButtonText}>Back</Text>
               </TouchableOpacity>
               <View style={styles.moduleHeaderText}>
@@ -2290,6 +2303,8 @@ export default function App() {
               <TouchableOpacity
                 onPress={() => handleOpenJournalEntry(currentModule.id)}
                 style={styles.moduleJournalButton}
+                accessibilityRole="button"
+                accessibilityLabel="Open journal for this module"
               >
                 <Text style={styles.moduleJournalButtonText}>Journal</Text>
               </TouchableOpacity>
@@ -2319,6 +2334,9 @@ export default function App() {
                   styles.resetButton,
                   !hasCompletedCards && styles.resetButtonDisabled,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel="Reset module progress"
+                accessibilityState={{ disabled: !hasCompletedCards }}
               >
                 <Text
                   style={[
@@ -2407,6 +2425,9 @@ export default function App() {
                   styles.completeButton,
                   completedIndexes.has(currentCardIndex) && styles.completeButtonDisabled,
                 ]}
+                accessibilityRole="button"
+                accessibilityLabel={completedIndexes.has(currentCardIndex) ? 'Card completed' : 'Mark card as complete'}
+                accessibilityState={{ disabled: completedIndexes.has(currentCardIndex) }}
               >
                 <Text
                   style={[
@@ -2436,7 +2457,12 @@ export default function App() {
         <View style={styles.container}>
           <View style={styles.header}>
             <View style={styles.headerTopRow}>
-              <TouchableOpacity onPress={handleBackHome} style={styles.backButton}>
+              <TouchableOpacity 
+                onPress={handleBackHome} 
+                style={styles.backButton}
+                accessibilityRole="button"
+                accessibilityLabel="Go back to home"
+              >
                 <Text style={styles.backButtonText}>Back</Text>
               </TouchableOpacity>
               <View style={styles.headerTitleContainer}>
@@ -2451,6 +2477,8 @@ export default function App() {
                 key={module.id}
                 onPress={() => handleOpenJournalEntry(module.id)}
                 style={styles.journalEntryCard}
+                accessibilityRole="button"
+                accessibilityLabel={`Journal entry for ${module.title}. ${entry ? 'Has entry' : 'No entry yet'}`}
               >
                 <LinearGradient colors={module.gradient} style={styles.journalEntryGradient}>
                   <View style={styles.journalEntryHeader}>
@@ -2498,6 +2526,8 @@ export default function App() {
                   setEditingModuleId(null);
                 }}
                 style={styles.backButton}
+                accessibilityRole="button"
+                accessibilityLabel="Go back to journal list"
               >
                 <Text style={styles.backButtonText}>Back</Text>
               </TouchableOpacity>
@@ -2516,10 +2546,14 @@ export default function App() {
                 value={journalEntryText}
                 onChangeText={setJournalEntryText}
                 textAlignVertical="top"
+                accessibilityLabel="Journal entry text input"
+                accessibilityHint="Enter your key takeaways and reflections for this module"
               />
               <TouchableOpacity
                 onPress={() => handleSaveJournalEntry(editingModuleId, journalEntryText)}
                 style={styles.journalSaveButton}
+                accessibilityRole="button"
+                accessibilityLabel="Save journal entry"
               >
                 <Text style={styles.journalSaveButtonText}>Save Entry</Text>
               </TouchableOpacity>
